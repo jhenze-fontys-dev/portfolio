@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overzicht Node.js Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 40px;
+        }
+
+        section {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        h2 {
+            color: #111827;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        pre {
+            background-color: #f3f4f6;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.95rem;
+        }
+
+        code {
+            background-color: #e5e7eb;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Overzicht Node.js Website</h1>
+
+<section>
+<h2>Projectstructuur</h2>
+
+<pre>
+project-root/
+├── data/
+│   ├── appointments.json
+│   ├── burgers.json
+│   ├── index.json
+│   └── zorg.json
+├── lib/
+│   ├── handlers.js
+│   └── utils.js
+├── public/
+│   ├── css/
+│   │   └── style.css
+│   ├── images/
+│   │   └── cat.png
+│   ├── js/
+│   │   ├── burgers.js
+│   │   ├── index.js
+│   │   └── zorg.js
+│   ├── burger.html
+│   ├── documentatie.html
+│   ├── error.html
+│   ├── index.html
+│   └── zorg.html
+└── server.js
+</pre>
+</section>
+
+<section>
+<h2>Dataopslag (JSON)</h2>
+<p>De server maakt gebruik van drie JSON-bestanden om data op te slaan:</p>
+
+<h3>burgers.json</h3>
+<pre>[
+  { "bsn": "B001", "name": "John Doe", "email": "johndoe@burger.com"}
+]</pre>
+
+<h3>zorg.json</h3>
+<pre>[
+  { "zsn": "Z001", "name": "Jack Doe", "email": "jackdoe@zorg.com" }
+]</pre>
+
+<h3>appointments.json</h3>
+<pre>[
+  {
+    "id": 1,
+    "zsn": "Z001",
+    "bsn": "B001",
+    "datetime": "2025-10-06T10:00:00Z"
+  }
+]</pre>
+<p><strong>Opmerking:</strong> Datum en tijd worden opgeslagen in ISO 8601-formaat (UTC), wat eenvoudig om te zetten is in lokale tijd in JavaScript.</p>
+</section>
+
+<section>
+<h2>server.js</h2>
+<p><strong>Doel:</strong> Hoofdserverbestand dat een HTTP-server opzet met Node.js (<code>http.createServer</code>) en inkomende requests afhandelt.</p>
+<p><strong>Belangrijkste onderdelen:</strong></p>
+<ul>
+    <li><code>serveStatic(req, res)</code> → probeert eerst statische bestanden (HTML, CSS, JS) te serveren.</li>
+    <li><code>handleZorgApi(req, res)</code> → verwerkt GET-requests naar <code>/api/zorg</code> (zorggerelateerde data).</li>
+    <li><code>handleBurgerApi(req, res)</code> → verwerkt GET-requests naar <code>/api/burger</code> (burgerdata).</li>
+    <li><code>handleGet(req, res)</code> → behandelt reguliere GET-requests voor pagina’s.</li>
+    <li><code>handlePostLogin(req, res)</code> → verwerkt POST-request naar <code>/login</code> voor loginfunctionaliteit.</li>
+</ul>
+<p><strong>Foutafhandeling:</strong></p>
+<ul>
+    <li>405 bij unsupported methods.</li>
+    <li>500 bij server errors.</li>
+</ul>
+<p>Luistert op de poort die is ingesteld in <code>process.env.PORT</code>.</p>
+</section>
+
+<section>
+<h2>handlers.js</h2>
+<p><strong>Doel:</strong> Bevat alle request-handlers die door <code>server.js</code> worden aangeroepen. Verdeelt requests in GET-pagina’s, API-requests en login POSTs.</p>
+<p><strong>Belangrijkste functies:</strong></p>
+<pre>
+1. handleGet(req, res) 
+   - Reguliere GET-requests voor HTML-pagina’s.
+   - Bepaalt welk bestand geladen moet worden op basis van req.url:
+     - /vaccinatie/ → index.html
+     - /zorg.html → zorg.html
+     - /burger.html → burger.html
+   - Leest het bestand en stuurt het terug als text/html
+   - Bij fouten of onbekende pagina → handleError
+
+2. handleBurgerApi(req, res)
+   - API-endpoint /api/burger?email=...
+   - Zoekt burger op basis van e-mail
+   - Retourneert JSON met naam en BSN
+   - Foutafhandeling voor niet gevonden burgers of serverproblemen
+
+3. handleZorgApi(req, res)
+   - API-endpoint /api/zorg?email=...
+   - Zoekt zorgverlener op basis van e-mail
+   - Haalt afspraken op inclusief gekoppelde patiëntgegevens
+   - Retourneert JSON met zorgverlener en afspraken
+   - Foutafhandeling voor niet gevonden zorgmedewerker of serverproblemen
+
+4. handlePostLogin(req, res)
+   - POST /login
+   - Parseert e-mail uit POST-body
+   - Controleert of e-mail bij zorgverlener of burger hoort
+   - Redirect naar juiste pagina of toont foutmelding
+</pre>
+<p><strong>Hulpfuncties gebruikt:</strong> <code>handleError</code>, <code>renderTemplate</code></p>
+</section>
+
+<section>
+<h2>utils.js</h2>
+<p><strong>Doel:</strong> Bevat helperfuncties voor statische bestanden, error-afhandeling en eenvoudige templating.</p>
+<p><strong>Belangrijkste functies:</strong></p>
+<pre>
+1. renderTemplate(filePath, placeholders)
+   - Leest HTML en vervangt {{KEY}} placeholders
+
+2. handleError(res, status, message)
+   - Render errorpagina met status en message
+   - Stuurt HTML terug met juiste HTTP-status
+   - Fallback: plain-text foutmelding
+
+3. serveStatic(req, res)
+   - Serveren van statische bestanden uit public-map
+   - Detecteert Content-Type (html, css, js, images)
+   - Stuurt bestand terug en returnt true
+   - Als bestand niet bestaat → returnt false
+</pre>
+</section>
+
+<section>
+<h2>API-documentatie</h2>
+
+<h3>GET /api/zorg?email=jackdoe@zorg.com</h3>
+<p>Geeft gegevens van een zorgmedewerker met gekoppelde afspraken en patiëntinformatie.</p>
+<pre>{
+  "name": "Jack Doe",
+  "zsn": "Z001",
+  "appointments": [
+    {
+      "id": 1,
+      "datetime": "2025-10-06T10:00:00Z",
+      "patient": {
+        "name": "John Doe",
+        "email": "johndoe@burger.com"
+      }
+    }
+  ]
+}</pre>
+
+<h3>GET /api/burger?email=johndoe@burger.com</h3>
+<p>Geeft de gegevens van een burger op basis van e-mail.</p>
+<pre>{
+  "name": "John Doe",
+  "bsn": "B001"
+}</pre>
+
+<h3>POST /login</h3>
+<p>Controleert de e-mail en stuurt de gebruiker door naar de juiste pagina.</p>
+<pre>
+Body:
+email=jackdoe@zorg.com
+</pre>
+</section>
+
+<section>
+<h2>Testinstructies</h2>
+<ol>
+  <li>Start de server met <code>npm start</code>.</li>
+  <li>Ga naar <code>http://localhost:8000/vaccinatie/</code>.</li>
+  <li>Log in met een bestaand e-mailadres uit <code>burgers.json</code> of <code>zorg.json</code>.</li>
+  <li>Gebruik eventueel <code>curl</code> om API’s te testen:
+  <pre>curl "http://localhost:8000/api/zorg?email=jackdoe@zorg.com"</pre></li>
+  <li>Controleer dat de JSON-data correct wordt weergegeven.</li>
+</ol>
+</section>
+
+</body>
+</html>

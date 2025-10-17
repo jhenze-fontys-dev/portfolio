@@ -1,0 +1,6 @@
+[
+  { "bsn": "B001", "name": "John Doe", "email": "johndoe@burger.com"},
+  { "bsn": "B002", "name": "Jane Doe", "email": "janedoe@burger.com" },
+  { "bsn": "B003", "name": "Jim Doe", "email": "jimdoe@burger.com" }, 
+  { "bsn": "B004", "name": "Joke Doe", "email": "jokedoe@burger.com" }
+]

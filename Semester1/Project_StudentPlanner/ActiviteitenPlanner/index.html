@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studenten Activiteitenplanner</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <!-- Kalender -->
+    <div class="calendar">
+      <div class="calendar-header">
+        <button id="prevMonth">◀</button>
+        <h2 id="monthYear"></h2>
+        <button id="nextMonth">▶</button>
+      </div>
+      <div id="calendar"></div>
+    </div>
+
+    <!-- Activiteitenbeheer -->
+    <div class="activity-panel">
+      <h2>Activiteit</h2>
+      <form id="activityForm">
+        <label for="date">Datum:</label>
+        <input type="date" id="date" required>
+
+        <label>
+          <input type="checkbox" id="allDay" checked>
+          Hele dag
+        </label>
+
+        <div id="timeInputs" style="display:none;">
+          <label for="startTime">Begintijd:</label>
+          <input type="time" id="startTime">
+
+          <label for="endTime">Eindtijd:</label>
+          <input type="time" id="endTime">
+        </div>
+
+        <label for="reminder">Herinnering:</label>
+        <select id="reminder">
+          <option value="none">Geen</option>
+          <option value="1">1 minuut voor</option>
+          <option value="5">5 minuten voor</option>
+          <option value="10">10 minuten voor</option>
+          <option value="15">15 minuten voor</option>
+          <option value="30">30 minuten voor</option>
+          <option value="60">1 uur voor</option>
+          <option value="1440">1 dag voor</option>
+        </select>
+
+        <label for="description">Omschrijving:</label>
+        <textarea id="description" required></textarea>
+
+        <div class="buttons">
+          <button type="submit">Opslaan</button>
+          <button type="button" id="deleteBtn">Verwijderen</button>
+        </div>
+      </form>
+
+      <h3>Bestaande activiteiten</h3>
+      <ul id="activityList"></ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
