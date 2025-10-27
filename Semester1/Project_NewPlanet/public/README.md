@@ -1,0 +1,1 @@
+ # Notes about static assets & front delivery

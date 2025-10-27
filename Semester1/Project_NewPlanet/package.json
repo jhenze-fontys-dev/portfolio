@@ -1,0 +1,29 @@
+{
+  "name": "fullstack_template",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fullstack Template project — scalable structure for Express backend and future React frontend.",
+  "scripts": {
+    "start:backend": "npm --prefix backend start",
+    "dev:backend": "npm --prefix backend run dev",
+    "db:init": "npm --prefix backend run db:init",
+
+    "start:frontend": "npm --prefix frontend start",
+    "dev:frontend": "npm --prefix frontend run dev",
+
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  },
+  "keywords": [
+    "fullstack",
+    "express",
+    "react",
+    "template",
+    "sqlite",
+    "swagger"
+  ],
+  "author": "Jack Henze",
+  "license": "MIT"
+}

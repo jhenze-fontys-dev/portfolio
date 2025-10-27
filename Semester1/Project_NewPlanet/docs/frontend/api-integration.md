@@ -1,0 +1,1 @@
+# How frontend consumes backend API

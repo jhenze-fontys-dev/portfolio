@@ -1,0 +1,1 @@
+# High-level architecture of full stack
