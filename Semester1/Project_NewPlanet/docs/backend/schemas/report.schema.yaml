@@ -1,35 +1,34 @@
-# -----------------------------------------------------------------------------
-# 🧩 TEMPLATE SCHEMA FILE
-# Copy this file when creating a new OpenAPI schema for an entity.
-# Example: rename to `user.yaml`, `product.yaml`, etc.
-# -----------------------------------------------------------------------------
-# Replace placeholders:
-#   {Entity}  → singular model name (e.g., User, Product)
-# -----------------------------------------------------------------------------
-
 type: object
 required:
   - id
-  - name
+  - type
+  - data
 properties:
   id:
     type: integer
-    description: Unique identifier for the {Entity}
+    description: Unique report ID
     example: 1
 
-  name:
+  type:
     type: string
-    description: Display name of the {Entity}
-    example: Example {Entity} Name
+    description: Type of report (population, genetics, capacity, etc.)
+    example: population
 
-  createdAt:
+  data:
+    type: object
+    description: JSON-encoded report data
+    example:
+      population: 850000
+      growth_rate: 0.03
+
+  created_at:
     type: string
     format: date-time
-    description: Date when the {Entity} was created
-    example: 2025-01-01T10:00:00Z
+    description: Creation timestamp
+    example: 2125-01-01T10:00:00Z
 
-  updatedAt:
+  updated_at:
     type: string
     format: date-time
-    description: Date when the {Entity} was last updated
-    example: 2025-01-02T14:00:00Z
+    description: Last updated timestamp
+    example: 2125-01-02T14:00:00Z

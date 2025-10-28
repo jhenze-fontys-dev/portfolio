@@ -1,35 +1,77 @@
-# -----------------------------------------------------------------------------
-# 🧩 TEMPLATE SCHEMA FILE
-# Copy this file when creating a new OpenAPI schema for an entity.
-# Example: rename to `user.yaml`, `product.yaml`, etc.
-# -----------------------------------------------------------------------------
-# Replace placeholders:
-#   {Entity}  → singular model name (e.g., User, Product)
-# -----------------------------------------------------------------------------
-
 type: object
 required:
   - id
   - name
+  - max_population
 properties:
   id:
     type: integer
-    description: Unique identifier for the {Entity}
+    description: Unique planet data ID
     example: 1
 
   name:
     type: string
-    description: Display name of the {Entity}
-    example: Example {Entity} Name
+    description: Name of the planet
+    example: "New Eden"
 
-  createdAt:
+  max_population:
+    type: integer
+    description: Maximum sustainable population
+    example: 1000000
+
+  resource_capacity:
+    type: number
+    format: float
+    description: Total available resource capacity
+    example: 500000.0
+
+  sustainability_factor:
+    type: number
+    format: float
+    description: Planet’s sustainability score
+    example: 0.85
+
+  area_km2:
+    type: number
+    format: float
+    description: Total surface area in km²
+    example: 1234567.0
+
+  current_population:
+    type: integer
+    description: Current population on the planet
+    example: 820000
+
+  migration_in:
+    type: integer
+    description: Number of incoming migrants
+    example: 1500
+
+  migration_out:
+    type: integer
+    description: Number of outgoing migrants
+    example: 400
+
+  avg_resource_use:
+    type: number
+    format: float
+    description: Average resource use per citizen
+    example: 1.2
+
+  growth_rate:
+    type: number
+    format: float
+    description: Annual population growth rate
+    example: 0.03
+
+  created_at:
     type: string
     format: date-time
-    description: Date when the {Entity} was created
-    example: 2025-01-01T10:00:00Z
+    description: Creation timestamp
+    example: 2125-01-01T10:00:00Z
 
-  updatedAt:
+  updated_at:
     type: string
     format: date-time
-    description: Date when the {Entity} was last updated
-    example: 2025-01-02T14:00:00Z
+    description: Last updated timestamp
+    example: 2125-01-02T14:00:00Z

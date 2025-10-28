@@ -1,35 +1,39 @@
-# -----------------------------------------------------------------------------
-# 🧩 TEMPLATE SCHEMA FILE
-# Copy this file when creating a new OpenAPI schema for an entity.
-# Example: rename to `user.yaml`, `product.yaml`, etc.
-# -----------------------------------------------------------------------------
-# Replace placeholders:
-#   {Entity}  → singular model name (e.g., User, Product)
-# -----------------------------------------------------------------------------
-
 type: object
 required:
   - id
-  - name
+  - citizen_a_id
+  - citizen_b_id
+  - coefficient
 properties:
   id:
     type: integer
-    description: Unique identifier for the {Entity}
+    description: Unique genetic result ID
     example: 1
 
-  name:
-    type: string
-    description: Display name of the {Entity}
-    example: Example {Entity} Name
+  citizen_a_id:
+    type: integer
+    description: First citizen ID in comparison
+    example: 2
 
-  createdAt:
+  citizen_b_id:
+    type: integer
+    description: Second citizen ID in comparison
+    example: 3
+
+  coefficient:
+    type: number
+    format: float
+    description: Inbreeding coefficient value
+    example: 0.0625
+
+  threshold:
+    type: number
+    format: float
+    description: Threshold value for warning
+    example: 0.1
+
+  timestamp:
     type: string
     format: date-time
-    description: Date when the {Entity} was created
-    example: 2025-01-01T10:00:00Z
-
-  updatedAt:
-    type: string
-    format: date-time
-    description: Date when the {Entity} was last updated
-    example: 2025-01-02T14:00:00Z
+    description: Calculation timestamp
+    example: 2125-01-01T10:00:00Z

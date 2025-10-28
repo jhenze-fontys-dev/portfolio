@@ -1,35 +1,68 @@
-# -----------------------------------------------------------------------------
-# 🧩 TEMPLATE SCHEMA FILE
-# Copy this file when creating a new OpenAPI schema for an entity.
-# Example: rename to `user.yaml`, `product.yaml`, etc.
-# -----------------------------------------------------------------------------
-# Replace placeholders:
-#   {Entity}  → singular model name (e.g., User, Product)
-# -----------------------------------------------------------------------------
-
 type: object
 required:
   - id
-  - name
+  - citizen_id
+  - type
+  - date
 properties:
   id:
     type: integer
-    description: Unique identifier for the {Entity}
+    description: Unique event ID
     example: 1
 
-  name:
-    type: string
-    description: Display name of the {Entity}
-    example: Example {Entity} Name
+  citizen_id:
+    type: integer
+    description: Main citizen involved in the event
+    example: 3
 
-  createdAt:
+  type:
+    type: string
+    enum: [birth, marriage, death]
+    description: Type of the life event
+    example: birth
+
+  date:
+    type: string
+    format: date
+    description: Event date
+    example: 2125-05-16
+
+  location:
+    type: string
+    description: Event location
+    example: "Colony Hospital"
+
+  partner_id:
+    type: integer
+    nullable: true
+    description: Partner’s citizen ID (for marriages)
+    example: 4
+
+  parent_a_id:
+    type: integer
+    nullable: true
+    description: First parent ID (for births)
+    example: 2
+
+  parent_b_id:
+    type: integer
+    nullable: true
+    description: Second parent ID (for births)
+    example: 3
+
+  details:
+    type: string
+    description: Extra event data (JSON or text)
+    example: "Born during lunar eclipse"
+
+  created_at:
     type: string
     format: date-time
-    description: Date when the {Entity} was created
-    example: 2025-01-01T10:00:00Z
+    description: Record creation timestamp
+    example: 2125-01-01T10:00:00Z
 
-  updatedAt:
+  updated_at:
     type: string
     format: date-time
-    description: Date when the {Entity} was last updated
-    example: 2025-01-02T14:00:00Z
+    description: Record last update
+    example: 2125-01-02T14:00:00Z

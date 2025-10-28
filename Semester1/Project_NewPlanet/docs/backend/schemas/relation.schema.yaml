@@ -1,35 +1,58 @@
-# -----------------------------------------------------------------------------
-# 🧩 TEMPLATE SCHEMA FILE
-# Copy this file when creating a new OpenAPI schema for an entity.
-# Example: rename to `user.yaml`, `product.yaml`, etc.
-# -----------------------------------------------------------------------------
-# Replace placeholders:
-#   {Entity}  → singular model name (e.g., User, Product)
-# -----------------------------------------------------------------------------
-
 type: object
 required:
   - id
-  - name
+  - type
+  - citizen_id
+  - related_citizen_id
 properties:
   id:
     type: integer
-    description: Unique identifier for the {Entity}
+    description: Unique relation ID
     example: 1
 
-  name:
+  type:
     type: string
-    description: Display name of the {Entity}
-    example: Example {Entity} Name
+    enum: [parent, child, spouse]
+    description: Type of relation
+    example: spouse
 
-  createdAt:
+  citizen_id:
+    type: integer
+    description: Primary citizen ID
+    example: 1
+
+  related_citizen_id:
+    type: integer
+    description: Related citizen ID
+    example: 2
+
+  status:
+    type: string
+    enum: [active, divorced, widowed, inactive]
+    description: Current relationship status
+    example: active
+
+  start_date:
+    type: string
+    format: date
+    description: Date when relationship started
+    example: 2120-05-16
+
+  end_date:
+    type: string
+    format: date
+    nullable: true
+    description: End date of relationship
+    example: null
+
+  created_at:
     type: string
     format: date-time
-    description: Date when the {Entity} was created
-    example: 2025-01-01T10:00:00Z
+    description: Creation timestamp
+    example: 2125-01-01T10:00:00Z
 
-  updatedAt:
+  updated_at:
     type: string
     format: date-time
-    description: Date when the {Entity} was last updated
-    example: 2025-01-02T14:00:00Z
+    description: Update timestamp
+    example: 2125-01-02T14:00:00Z

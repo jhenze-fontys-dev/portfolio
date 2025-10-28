@@ -1,35 +1,45 @@
-# -----------------------------------------------------------------------------
-# 🧩 TEMPLATE SCHEMA FILE
-# Copy this file when creating a new OpenAPI schema for an entity.
-# Example: rename to `user.yaml`, `product.yaml`, etc.
-# -----------------------------------------------------------------------------
-# Replace placeholders:
-#   {Entity}  → singular model name (e.g., User, Product)
-# -----------------------------------------------------------------------------
-
 type: object
 required:
   - id
-  - name
+  - email
+  - password_hash
+  - role_id
 properties:
   id:
     type: integer
-    description: Unique identifier for the {Entity}
+    description: Unique identifier for the User
     example: 1
 
-  name:
+  email:
     type: string
-    description: Display name of the {Entity}
-    example: Example {Entity} Name
+    format: email
+    description: Email address of the user
+    example: jack@example.com
 
-  createdAt:
+  password_hash:
+    type: string
+    description: Hashed user password
+    example: "$2b$10$AbCdEf..."
+
+  citizen_id:
+    type: integer
+    nullable: true
+    description: Linked Citizen ID
+    example: 5
+
+  role_id:
+    type: integer
+    description: Linked Role ID
+    example: 2
+
+  created_at:
     type: string
     format: date-time
-    description: Date when the {Entity} was created
-    example: 2025-01-01T10:00:00Z
+    description: Creation timestamp
+    example: 2125-01-01T10:00:00Z
 
-  updatedAt:
+  updated_at:
     type: string
     format: date-time
-    description: Date when the {Entity} was last updated
-    example: 2025-01-02T14:00:00Z
+    description: Last update timestamp
+    example: 2125-01-02T14:00:00Z

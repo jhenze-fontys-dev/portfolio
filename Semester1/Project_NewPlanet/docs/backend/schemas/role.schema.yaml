@@ -1,12 +1,3 @@
-# -----------------------------------------------------------------------------
-# 🧩 TEMPLATE SCHEMA FILE
-# Copy this file when creating a new OpenAPI schema for an entity.
-# Example: rename to `user.yaml`, `product.yaml`, etc.
-# -----------------------------------------------------------------------------
-# Replace placeholders:
-#   {Entity}  → singular model name (e.g., User, Product)
-# -----------------------------------------------------------------------------
-
 type: object
 required:
   - id
@@ -14,22 +5,23 @@ required:
 properties:
   id:
     type: integer
-    description: Unique identifier for the {Entity}
+    description: Unique identifier for the Role
     example: 1
 
   name:
     type: string
-    description: Display name of the {Entity}
-    example: Example {Entity} Name
+    enum: [citizen, civilServant, admin]
+    description: Role name defining user permissions
+    example: civilServant
 
-  createdAt:
+  created_at:
     type: string
     format: date-time
-    description: Date when the {Entity} was created
-    example: 2025-01-01T10:00:00Z
+    description: Record creation date
+    example: 2125-01-01T10:00:00Z
 
-  updatedAt:
+  updated_at:
     type: string
     format: date-time
-    description: Date when the {Entity} was last updated
-    example: 2025-01-02T14:00:00Z
+    description: Last update date
+    example: 2125-01-02T14:00:00Z

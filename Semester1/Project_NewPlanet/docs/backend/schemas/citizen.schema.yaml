@@ -1,35 +1,62 @@
-# -----------------------------------------------------------------------------
-# 🧩 TEMPLATE SCHEMA FILE
-# Copy this file when creating a new OpenAPI schema for an entity.
-# Example: rename to `user.yaml`, `product.yaml`, etc.
-# -----------------------------------------------------------------------------
-# Replace placeholders:
-#   {Entity}  → singular model name (e.g., User, Product)
-# -----------------------------------------------------------------------------
-
 type: object
 required:
   - id
-  - name
+  - first_name
+  - last_name
+  - birth_date
 properties:
   id:
     type: integer
-    description: Unique identifier for the {Entity}
+    description: Unique identifier for the Citizen
     example: 1
 
-  name:
+  first_name:
     type: string
-    description: Display name of the {Entity}
-    example: Example {Entity} Name
+    description: First name of the citizen
+    example: Jack
 
-  createdAt:
+  last_name:
+    type: string
+    description: Last name of the citizen
+    example: Henze
+
+  birth_date:
+    type: string
+    format: date
+    description: Date of birth (ISO 8601)
+    example: 2085-05-16
+
+  death_date:
+    type: string
+    format: date
+    nullable: true
+    description: Date of death (if applicable)
+    example: null
+
+  gender:
+    type: string
+    description: Gender of the citizen
+    example: male
+
+  address:
+    type: string
+    description: Current address of the citizen
+    example: "Main Street 42, New Colony"
+
+  status:
+    type: string
+    enum: [alive, deceased]
+    description: Current life status
+    example: alive
+
+  created_at:
     type: string
     format: date-time
-    description: Date when the {Entity} was created
-    example: 2025-01-01T10:00:00Z
+    description: Record creation date
+    example: 2125-01-01T10:00:00Z
 
-  updatedAt:
+  updated_at:
     type: string
     format: date-time
-    description: Date when the {Entity} was last updated
-    example: 2025-01-02T14:00:00Z
+    description: Record last update date
+    example: 2125-01-02T14:00:00Z
