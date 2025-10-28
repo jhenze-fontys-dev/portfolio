@@ -49,12 +49,20 @@ Handles authentication, account management, and role assignments.
 | `update(id, fields)` | Updates user info, rehashes password if changed |
 | `remove(id)` | Deletes a user |
 | `search(params)` | Filters by email, role, etc. |
-| `login(email, password)` | Validates credentials with bcrypt |
+| `login(email, password)` | Validates credentials using crypto hashing |
 | `assignRole(userId, roleId)` | Assigns or changes a user’s role |
 
-### Notes
-- Passwords are hashed using **bcrypt**.  
-- Integrates easily with JWT-based authentication.
+### 🔐 Password Security
+
+- Passwords are now hashed using **Node.js built-in `crypto`** (PBKDF2 with SHA-512).  
+- Each password uses a **unique salt** and is stored as `salt:hash`.  
+- The verification function re-derives the hash and ensures secure comparison.  
+- This eliminates external dependencies such as `bcrypt` or `bcryptjs`.
+
+**Advantages:**
+- No native build tools or external libraries required.  
+- Fully cross-platform and compatible with Node 18–22.  
+- Strong cryptographic standard (PBKDF2 + SHA-512 + random salt).
 
 ---
 
@@ -195,30 +203,3 @@ All services:
 - Are designed for modular use through:
   ```js
   import { dataService } from '../data/dataServiceFactory.js';
-  ```
-
----
-
-## 🧩 Example Service Factory Pattern
-
-```js
-// backend/data/dataServiceFactory.js
-import { citizenService } from './sql/services/citizen.service.js';
-import { userService } from './sql/services/user.service.js';
-import { eventService } from './sql/services/event.service.js';
-// ...other services
-
-export const dataService = {
-  citizen: citizenService,
-  user: userService,
-  event: eventService,
-  // ...
-};
-```
-
----
-
-**Author:** Jack Henze  
-**Database Engine:** SQLite / Sequelize ORM  
-**Version:** 1.1.0  
-**Updated:** October 2025  
