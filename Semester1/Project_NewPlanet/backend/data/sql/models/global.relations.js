@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------------
-// 🌐 Population Registry — Sequelize Relations
-// Defines all associations between database models.
+// 🌐 Population Registry — Sequelize Relations (Global Association Loader)
+// Defines all model relationships AFTER all models are initialized.
 // -----------------------------------------------------------------------------
 
 import Citizen from './citizen.model.js';
@@ -16,13 +16,13 @@ import Report from './report.model.js';
 // 👥 User ↔ Citizen ↔ Role
 // -----------------------------------------------------------------------------
 
-// Each User belongs to one Citizen (their personal profile)
+// Each User belongs to one Citizen (their personal identity)
 User.belongsTo(Citizen, {
   foreignKey: 'citizen_id',
   as: 'citizen',
 });
 
-// Each Citizen can have zero or one linked User account
+// Each Citizen can have zero or one User account
 Citizen.hasOne(User, {
   foreignKey: 'citizen_id',
   as: 'user',
@@ -34,7 +34,7 @@ User.belongsTo(Role, {
   as: 'role',
 });
 
-// Each Role can be assigned to many Users
+// Each Role can have many Users
 Role.hasMany(User, {
   foreignKey: 'role_id',
   as: 'users',
@@ -50,19 +50,19 @@ Citizen.hasMany(Event, {
   as: 'events',
 });
 
-// Each Event belongs to a primary Citizen
+// Each Event belongs to one Citizen
 Event.belongsTo(Citizen, {
   foreignKey: 'citizen_id',
   as: 'citizen',
 });
 
-// Optional: partner relationship for marriage
+// Optional partner (for marriage events)
 Event.belongsTo(Citizen, {
   foreignKey: 'partner_id',
   as: 'partner',
 });
 
-// Optional: parental relationships for births
+// Optional parental links (for birth events)
 Event.belongsTo(Citizen, {
   foreignKey: 'parent_a_id',
   as: 'parentA',
@@ -77,19 +77,24 @@ Event.belongsTo(Citizen, {
 // 🔗 Citizen ↔ Relation (Self-referential)
 // -----------------------------------------------------------------------------
 
-// A Citizen can have many relations (children, spouses, etc.)
+// A Citizen can have many outgoing relations (e.g., as parent/spouse)
 Citizen.hasMany(Relation, {
   foreignKey: 'citizen_id',
   as: 'relations',
 });
 
-// Each relation links back to a Citizen
+// A Citizen can have many incoming relations (e.g., as relatedCitizen)
+Citizen.hasMany(Relation, {
+  foreignKey: 'related_citizen_id',
+  as: 'relatedRelations',
+});
+
+// Each Relation connects two citizens
 Relation.belongsTo(Citizen, {
   foreignKey: 'citizen_id',
   as: 'citizen',
 });
 
-// The related citizen (the other party in the relation)
 Relation.belongsTo(Citizen, {
   foreignKey: 'related_citizen_id',
   as: 'relatedCitizen',
@@ -99,7 +104,7 @@ Relation.belongsTo(Citizen, {
 // 🧬 Citizen ↔ GeneticResult (Self-referential pair)
 // -----------------------------------------------------------------------------
 
-// A Citizen can be part of many genetic results (as A or B)
+// A Citizen can appear in many GeneticResult entries
 Citizen.hasMany(GeneticResult, {
   foreignKey: 'citizen_a_id',
   as: 'geneticResultsA',
@@ -110,7 +115,7 @@ Citizen.hasMany(GeneticResult, {
   as: 'geneticResultsB',
 });
 
-// Each GeneticResult belongs to two citizens
+// Each GeneticResult belongs to two Citizens
 GeneticResult.belongsTo(Citizen, {
   foreignKey: 'citizen_a_id',
   as: 'citizenA',
@@ -122,10 +127,9 @@ GeneticResult.belongsTo(Citizen, {
 });
 
 // -----------------------------------------------------------------------------
-// 🌍 PlanetData ↔ Report
+// 🌍 PlanetData ↔ Report (Optional one-to-many)
 // -----------------------------------------------------------------------------
 
-// Currently reports are global, but if you later link them:
 PlanetData.hasMany(Report, {
   foreignKey: 'planet_id',
   as: 'reports',
@@ -137,7 +141,7 @@ Report.belongsTo(PlanetData, {
 });
 
 // -----------------------------------------------------------------------------
-// ✅ Export all models (so they can be imported elsewhere easily)
+// ✅ Export all models for centralized imports
 // -----------------------------------------------------------------------------
 
 export {
@@ -150,3 +154,10 @@ export {
   PlanetData,
   Report,
 };
+
+// -----------------------------------------------------------------------------
+// ✅ Notes:
+// - This file MUST be imported after all model definitions are loaded.
+// - Example: import './data/sql/models/global.relations.js'; in server.js
+// - Keeps association logic centralized, preventing circular import issues.
+// -----------------------------------------------------------------------------
