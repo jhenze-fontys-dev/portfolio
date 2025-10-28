@@ -68,7 +68,6 @@ export const calculate = async (req, res, next) => {
     if (!citizen_a_id || !citizen_b_id)
       return next(createError('citizen_a_id and citizen_b_id are required', 400));
 
-    // Call the service layer
     const result = await dataService.geneticResult.calculate?.(citizen_a_id, citizen_b_id);
 
     if (!result)
@@ -77,6 +76,30 @@ export const calculate = async (req, res, next) => {
     res.status(201).json(result);
   } catch (err) {
     next(createError('Failed to calculate genetic result', 500));
+  }
+};
+
+/**
+ * CHECK potential pairing compatibility between two citizens
+ * Route: GET /api/genetics/check?partnerId={id}
+ * Example: /api/genetics/check?partnerId=12
+ */
+export const checkPairing = async (req, res, next) => {
+  try {
+    const currentCitizenId = req.user?.citizenId || req.query.citizenId; // from JWT or query
+    const partnerId = parseInt(req.query.partnerId);
+
+    if (!currentCitizenId || !partnerId)
+      return next(createError('citizenId and partnerId are required', 400));
+
+    const result = await dataService.geneticResult.checkPairing?.(currentCitizenId, partnerId);
+
+    if (!result)
+      return next(createError('Failed to check pairing compatibility', 500));
+
+    res.status(200).json(result);
+  } catch (err) {
+    next(createError('Failed to check genetic compatibility', 500));
   }
 };
 
