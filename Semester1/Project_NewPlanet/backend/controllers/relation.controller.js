@@ -107,30 +107,32 @@ export const search = async (req, res, next) => {
 };
 
 /**
- * GET all relations for a specific citizen
- * Route: GET /api/relations/citizen/:id
+ * GET all relations for a specific citizen (bidirectional)
+ * Route: GET /api/relations/citizen/:citizenId
  */
-export const getByCitizenId = async (req, res, next) => {
+export const getRelationsForCitizen = async (req, res, next) => {
   try {
-    const citizenId = parseInt(req.params.id);
-    const results = await dataService.relation.getByCitizenId(citizenId);
+    const citizenId = parseInt(req.params.citizenId);
+    if (isNaN(citizenId))
+      return next(createError('Invalid citizen ID', 400));
 
-    if (!results || results.length === 0)
+    const relations = await dataService.relation.getRelationsForCitizen(citizenId);
+    if (!relations || relations.length === 0)
       return next(createError(`No relations found for citizen id ${citizenId}`, 404));
 
-    res.status(200).json(results);
+    res.status(200).json(relations);
   } catch (err) {
     next(createError('Failed to load relations for citizen', 500));
   }
 };
 
 /**
- * GET relation tree for visualization (stamboom)
- * Route: GET /api/relations/tree/:id
+ * GET relation tree for visualization (family tree)
+ * Route: GET /api/relations/tree/:citizenId
  */
 export const getRelationTree = async (req, res, next) => {
   try {
-    const citizenId = parseInt(req.params.id);
+    const citizenId = parseInt(req.params.citizenId);
     const tree = await dataService.relation.getRelationTree?.(citizenId);
 
     if (!tree)
