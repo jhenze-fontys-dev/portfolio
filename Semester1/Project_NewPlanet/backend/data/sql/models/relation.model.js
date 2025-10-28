@@ -6,7 +6,6 @@
 
 import { DataTypes } from 'sequelize';
 import sequelize from '../db.js';
-import Citizen from './citizen.model.js';
 
 const Relation = sequelize.define(
   'Relation',
@@ -29,7 +28,7 @@ const Relation = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Citizen',
+        model: 'Citizen', // Reference by table name
         key: 'id',
       },
     },
@@ -38,7 +37,7 @@ const Relation = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Citizen',
+        model: 'Citizen', // Reference by table name
         key: 'id',
       },
     },
@@ -52,7 +51,7 @@ const Relation = sequelize.define(
     },
 
     start_date: {
-      type: DataTypes.STRING, // Stored as ISO 8601 string
+      type: DataTypes.STRING, // ISO 8601 date string
       allowNull: true,
     },
 
@@ -73,24 +72,8 @@ const Relation = sequelize.define(
   },
   {
     tableName: 'Relation',
-    timestamps: false, // Manual timestamps
+    timestamps: false, // handled manually
   }
 );
-
-// -----------------------------------------------------------------------------
-// 👥 Associations (needed for family tree logic)
-// -----------------------------------------------------------------------------
-
-// A relation belongs to one citizen (the "source" of the relation)
-Relation.belongsTo(Citizen, {
-  foreignKey: 'citizen_id',
-  as: 'citizen',
-});
-
-// A relation also belongs to another citizen (the "target" of the relation)
-Relation.belongsTo(Citizen, {
-  foreignKey: 'related_citizen_id',
-  as: 'relatedCitizen',
-});
 
 export default Relation;
