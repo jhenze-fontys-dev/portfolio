@@ -109,6 +109,47 @@ const options = {
           },
         },
       },
+
+      // -----------------------------------------------------------------------
+      // 🔍 Common Parameter References
+      // -----------------------------------------------------------------------
+      parameters: {
+        IdPathParam: {
+          name: 'id',
+          in: 'path',
+          required: true,
+          description: 'Unique identifier of the resource.',
+          schema: { type: 'integer', example: 1 },
+        },
+        PageQuery: {
+          name: 'page',
+          in: 'query',
+          required: false,
+          description: 'Page number for pagination.',
+          schema: { type: 'integer', example: 1 },
+        },
+        LimitQuery: {
+          name: 'limit',
+          in: 'query',
+          required: false,
+          description: 'Number of results per page.',
+          schema: { type: 'integer', example: 10 },
+        },
+        SortByQuery: {
+          name: 'sortBy',
+          in: 'query',
+          required: false,
+          description: 'Field name to sort results by.',
+          schema: { type: 'string', example: 'name' },
+        },
+        OrderQuery: {
+          name: 'order',
+          in: 'query',
+          required: false,
+          description: 'Sort order (ASC or DESC).',
+          schema: { type: 'string', enum: ['ASC', 'DESC'], example: 'ASC' },
+        },
+      },
     },
   },
 
