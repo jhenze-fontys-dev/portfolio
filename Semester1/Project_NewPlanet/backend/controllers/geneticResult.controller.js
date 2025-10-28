@@ -57,6 +57,30 @@ export const create = async (req, res, next) => {
 };
 
 /**
+ * CALCULATE genetic similarity / inbreeding coefficient
+ * Route: POST /api/genetics/calculate
+ * Example body: { "citizen_a_id": 1, "citizen_b_id": 2 }
+ */
+export const calculate = async (req, res, next) => {
+  try {
+    const { citizen_a_id, citizen_b_id } = req.body;
+
+    if (!citizen_a_id || !citizen_b_id)
+      return next(createError('citizen_a_id and citizen_b_id are required', 400));
+
+    // Call the service layer
+    const result = await dataService.geneticResult.calculate?.(citizen_a_id, citizen_b_id);
+
+    if (!result)
+      return next(createError('Failed to calculate genetic similarity', 500));
+
+    res.status(201).json(result);
+  } catch (err) {
+    next(createError('Failed to calculate genetic result', 500));
+  }
+};
+
+/**
  * UPDATE an existing genetic result
  * Route: PATCH /api/genetics/:id
  */
