@@ -8,7 +8,7 @@ let dataService;
 // Select data source dynamically based on .env
 if (process.env.DATA_SOURCE === 'sqlite') {
   console.log('Using SQLite database');
-  dataServiceModule = await import('./sql/services/sqlDataService.js');
+  dataServiceModule = await import('./sql/services/index.service.js');
   dataService = dataServiceModule.sqlDataService;
 } else {
   console.log('Using JSON data source');
