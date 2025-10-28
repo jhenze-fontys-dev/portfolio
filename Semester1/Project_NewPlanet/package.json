@@ -7,10 +7,8 @@
     "start:backend": "npm --prefix backend start",
     "dev:backend": "npm --prefix backend run dev",
     "db:init": "npm --prefix backend run db:init",
-
     "start:frontend": "npm --prefix frontend start",
     "dev:frontend": "npm --prefix frontend run dev",
-
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
   },
   "devDependencies": {
@@ -25,5 +23,6 @@
     "swagger"
   ],
   "author": "Jack Henze",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {}
 }

@@ -1,13 +1,33 @@
 // -----------------------------------------------------------------------------
-// 🔐 User SQL Service
+// 🔐 User SQL Service (using Node's built-in crypto for password hashing)
 // Provides CRUD, authentication, and role assignment logic for users.
 // -----------------------------------------------------------------------------
 
 import { Op } from 'sequelize';
-import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import User from '../models/user.model.js';
 import Role from '../models/role.model.js';
 import Citizen from '../models/citizen.model.js';
+
+// -----------------------------------------------------------------------------
+// 🧂 Password Hashing Helpers
+// -----------------------------------------------------------------------------
+
+function hashPassword(password) {
+  const salt = crypto.randomBytes(16).toString('hex'); // random salt
+  const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+  return `${salt}:${hash}`;
+}
+
+function verifyPassword(password, storedHash) {
+  const [salt, originalHash] = storedHash.split(':');
+  const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+  return hash === originalHash;
+}
+
+// -----------------------------------------------------------------------------
+// 🧠 Service Definition
+// -----------------------------------------------------------------------------
 
 export const userService = {
   /**
@@ -40,7 +60,7 @@ export const userService = {
   async create(payload) {
     // Hash password before saving
     if (payload.password) {
-      payload.password_hash = await bcrypt.hash(payload.password, 10);
+      payload.password_hash = hashPassword(payload.password);
       delete payload.password;
     }
 
@@ -57,7 +77,7 @@ export const userService = {
 
     // Re-hash password if changed
     if (fields.password) {
-      fields.password_hash = await bcrypt.hash(fields.password, 10);
+      fields.password_hash = hashPassword(fields.password);
       delete fields.password;
     }
 
@@ -77,29 +97,19 @@ export const userService = {
   },
 
   /**
-   * 🔍 Search users by filters (email, role, citizen, etc.)
-   * Examples:
-   *   /api/users/search?email=john
-   *   /api/users/search?roleId=2
-   *   /api/users/search?sortBy=email&order=ASC
+   * 🔎 Search users by filters (email, role, citizen, etc.)
    */
   async search(params = {}, includeRelations = false) {
     const { sortBy, order = 'ASC', ...filters } = params;
 
     const where = {};
-
     for (const [key, value] of Object.entries(filters)) {
       if (value === undefined || value === '') continue;
-
-      if (typeof value === 'string') {
-        where[key] = { [Op.like]: `%${value}%` };
-      } else {
-        where[key] = value;
-      }
+      if (typeof value === 'string') where[key] = { [Op.like]: `%${value}%` };
+      else where[key] = value;
     }
 
     const orderClause = sortBy ? [[sortBy, order.toUpperCase()]] : [];
-
     const include = includeRelations
       ? [{ model: Role, as: 'role' }, { model: Citizen, as: 'citizen' }]
       : [];
@@ -120,10 +130,9 @@ export const userService = {
 
     if (!user) return null;
 
-    const isValid = await bcrypt.compare(password, user.password_hash);
+    const isValid = verifyPassword(password, user.password_hash);
     if (!isValid) return null;
 
-    // Return sanitized user object
     const userData = user.toJSON();
     delete userData.password_hash;
     return userData;
