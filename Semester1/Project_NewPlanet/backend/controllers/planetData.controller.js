@@ -106,16 +106,18 @@ export const search = async (req, res, next) => {
 };
 
 /**
- * GET carrying capacity report
+ * GET carrying capacity and sustainability overview
  * Route: GET /api/planet/capacity
  */
-export const getCarryingCapacity = async (req, res, next) => {
+export const getCapacity = async (req, res, next) => {
   try {
     const result = await dataService.planetData.calculateCarryingCapacity?.();
+
     if (!result)
-      return next(createError('Failed to calculate carrying capacity', 500));
+      return next(createError('Failed to retrieve carrying capacity data', 500));
+
     res.status(200).json(result);
   } catch (err) {
-    next(createError('Error calculating carrying capacity', 500));
+    next(createError('Error retrieving carrying capacity data', 500));
   }
 };
