@@ -1,7 +1,8 @@
 // -----------------------------------------------------------------------------
 // 📘 Swagger / OpenAPI Configuration
 // -----------------------------------------------------------------------------
-// Generates OpenAPI documentation from YAML schemas and JSDoc annotations.
+// Modular setup: loads entity schemas, shared parameters, and responses
+// from YAML files, and merges them into the OpenAPI definition.
 // -----------------------------------------------------------------------------
 
 import swaggerJsdoc from 'swagger-jsdoc';
@@ -16,10 +17,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // -----------------------------------------------------------------------------
-// 🧩 Load Shared Schemas
+// 🧩 Load Shared YAML Files
 // -----------------------------------------------------------------------------
 const errorSchema = YAML.load(
-  path.resolve(__dirname, '../docs/backend/schemas/shared/errorResponse.yaml')
+  path.resolve(__dirname, '../docs/backend/schemas/shared/errorResponse.schema.yaml')
+);
+
+const responsesYaml = YAML.load(
+  path.resolve(__dirname, '../docs/backend/schemas/shared/responses.schema.yaml')
+);
+
+const parametersYaml = YAML.load(
+  path.resolve(__dirname, '../docs/backend/schemas/shared/parameters.schema.yaml')
 );
 
 // -----------------------------------------------------------------------------
@@ -69,7 +78,6 @@ const options = {
       // -----------------------------------------------------------------------
       schemas: {
         ErrorResponse: errorSchema.ErrorResponse,
-
         Citizen: citizenSchema.Citizen,
         User: userSchema.User,
         Role: roleSchema.Role,
@@ -81,75 +89,10 @@ const options = {
       },
 
       // -----------------------------------------------------------------------
-      // ⚠️ Common Response References
+      // ⚠️ Shared Responses & Parameters (loaded from YAML)
       // -----------------------------------------------------------------------
-      responses: {
-        BadRequest: {
-          description: 'Invalid request or parameters.',
-          content: {
-            'application/json': {
-              schema: { $ref: '#/components/schemas/ErrorResponse' },
-            },
-          },
-        },
-        NotFound: {
-          description: 'The requested resource was not found.',
-          content: {
-            'application/json': {
-              schema: { $ref: '#/components/schemas/ErrorResponse' },
-            },
-          },
-        },
-        ServerError: {
-          description: 'An internal server error occurred.',
-          content: {
-            'application/json': {
-              schema: { $ref: '#/components/schemas/ErrorResponse' },
-            },
-          },
-        },
-      },
-
-      // -----------------------------------------------------------------------
-      // 🔍 Common Parameter References
-      // -----------------------------------------------------------------------
-      parameters: {
-        IdPathParam: {
-          name: 'id',
-          in: 'path',
-          required: true,
-          description: 'Unique identifier of the resource.',
-          schema: { type: 'integer', example: 1 },
-        },
-        PageQuery: {
-          name: 'page',
-          in: 'query',
-          required: false,
-          description: 'Page number for pagination.',
-          schema: { type: 'integer', example: 1 },
-        },
-        LimitQuery: {
-          name: 'limit',
-          in: 'query',
-          required: false,
-          description: 'Number of results per page.',
-          schema: { type: 'integer', example: 10 },
-        },
-        SortByQuery: {
-          name: 'sortBy',
-          in: 'query',
-          required: false,
-          description: 'Field name to sort results by.',
-          schema: { type: 'string', example: 'name' },
-        },
-        OrderQuery: {
-          name: 'order',
-          in: 'query',
-          required: false,
-          description: 'Sort order (ASC or DESC).',
-          schema: { type: 'string', enum: ['ASC', 'DESC'], example: 'ASC' },
-        },
-      },
+      responses: responsesYaml.responses,
+      parameters: parametersYaml.parameters,
     },
   },
 
