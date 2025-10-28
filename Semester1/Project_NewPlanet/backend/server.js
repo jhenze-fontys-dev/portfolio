@@ -23,7 +23,7 @@ import PlanetData from './data/sql/models/planetData.model.js';
 import Report from './data/sql/models/report.model.js';
 
 // Relations (must be imported AFTER models)
-import './data/sql/models/populationRegister.relations.js';
+import './data/sql/models/global.relations.js';
 
 // Express routes
 import citizenRoutes from './routes/citizen.routes.js';
