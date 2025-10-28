@@ -56,6 +56,48 @@ export const create = async (req, res, next) => {
 };
 
 /**
+ * CREATE a birth event
+ * Route: POST /api/events/birth
+ */
+export const createBirth = async (req, res, next) => {
+  try {
+    const payload = { ...req.body, type: 'birth' };
+    const newEvent = await dataService.event.create(payload);
+    res.status(201).json(newEvent);
+  } catch (err) {
+    next(createError('Failed to create birth event', 500));
+  }
+};
+
+/**
+ * CREATE a marriage event
+ * Route: POST /api/events/marriage
+ */
+export const createMarriage = async (req, res, next) => {
+  try {
+    const payload = { ...req.body, type: 'marriage' };
+    const newEvent = await dataService.event.create(payload);
+    res.status(201).json(newEvent);
+  } catch (err) {
+    next(createError('Failed to create marriage event', 500));
+  }
+};
+
+/**
+ * CREATE a death event
+ * Route: POST /api/events/death
+ */
+export const createDeath = async (req, res, next) => {
+  try {
+    const payload = { ...req.body, type: 'death' };
+    const newEvent = await dataService.event.create(payload);
+    res.status(201).json(newEvent);
+  } catch (err) {
+    next(createError('Failed to create death event', 500));
+  }
+};
+
+/**
  * UPDATE an existing event
  * Route: PATCH /api/events/:id
  */
