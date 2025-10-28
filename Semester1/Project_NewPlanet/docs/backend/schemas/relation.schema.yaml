@@ -1,58 +1,59 @@
-type: object
-required:
-  - id
-  - type
-  - citizen_id
-  - related_citizen_id
-properties:
-  id:
-    type: integer
-    description: Unique relation ID
-    example: 1
+Relation:
+  type: object
+  required:
+    - id
+    - type
+    - citizen_id
+    - related_citizen_id
+  properties:
+    id:
+      type: integer
+      description: Unique relation ID
+      example: 1
 
-  type:
-    type: string
-    enum: [parent, child, spouse]
-    description: Type of relation
-    example: spouse
+    type:
+      type: string
+      enum: [parent, child, spouse]
+      description: Type of relation
+      example: spouse
 
-  citizen_id:
-    type: integer
-    description: Primary citizen ID
-    example: 1
+    citizen_id:
+      type: integer
+      description: Primary citizen ID
+      example: 1
 
-  related_citizen_id:
-    type: integer
-    description: Related citizen ID
-    example: 2
+    related_citizen_id:
+      type: integer
+      description: Related citizen ID
+      example: 2
 
-  status:
-    type: string
-    enum: [active, divorced, widowed, inactive]
-    description: Current relationship status
-    example: active
+    status:
+      type: string
+      enum: [active, divorced, widowed, inactive]
+      description: Current relationship status
+      example: active
 
-  start_date:
-    type: string
-    format: date
-    description: Date when relationship started
-    example: 2120-05-16
+    start_date:
+      type: string
+      format: date
+      description: Date when relationship started
+      example: 2120-05-16
 
-  end_date:
-    type: string
-    format: date
-    nullable: true
-    description: End date of relationship
-    example: null
+    end_date:
+      type: string
+      format: date
+      nullable: true
+      description: End date of relationship
+      example: null
 
-  created_at:
-    type: string
-    format: date-time
-    description: Creation timestamp
-    example: 2125-01-01T10:00:00Z
+    created_at:
+      type: string
+      format: date-time
+      description: Creation timestamp
+      example: 2125-01-01T10:00:00Z
 
-  updated_at:
-    type: string
-    format: date-time
-    description: Update timestamp
-    example: 2125-01-02T14:00:00Z
+    updated_at:
+      type: string
+      format: date-time
+      description: Update timestamp
+      example: 2125-01-02T14:00:00Z

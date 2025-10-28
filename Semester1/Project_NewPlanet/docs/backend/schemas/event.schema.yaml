@@ -1,68 +1,69 @@
-type: object
-required:
-  - id
-  - citizen_id
-  - type
-  - date
-properties:
-  id:
-    type: integer
-    description: Unique event ID
-    example: 1
+Event:
+  type: object
+  required:
+    - id
+    - citizen_id
+    - type
+    - date
+  properties:
+    id:
+      type: integer
+      description: Unique event ID
+      example: 1
 
-  citizen_id:
-    type: integer
-    description: Main citizen involved in the event
-    example: 3
+    citizen_id:
+      type: integer
+      description: Main citizen involved in the event
+      example: 3
 
-  type:
-    type: string
-    enum: [birth, marriage, death]
-    description: Type of the life event
-    example: birth
+    type:
+      type: string
+      enum: [birth, marriage, death]
+      description: Type of the life event
+      example: birth
 
-  date:
-    type: string
-    format: date
-    description: Event date
-    example: 2125-05-16
+    date:
+      type: string
+      format: date
+      description: Event date
+      example: 2125-05-16
 
-  location:
-    type: string
-    description: Event location
-    example: "Colony Hospital"
+    location:
+      type: string
+      description: Event location
+      example: "Colony Hospital"
 
-  partner_id:
-    type: integer
-    nullable: true
-    description: Partner’s citizen ID (for marriages)
-    example: 4
+    partner_id:
+      type: integer
+      nullable: true
+      description: Partner’s citizen ID (for marriages)
+      example: 4
 
-  parent_a_id:
-    type: integer
-    nullable: true
-    description: First parent ID (for births)
-    example: 2
+    parent_a_id:
+      type: integer
+      nullable: true
+      description: First parent ID (for births)
+      example: 2
 
-  parent_b_id:
-    type: integer
-    nullable: true
-    description: Second parent ID (for births)
-    example: 3
+    parent_b_id:
+      type: integer
+      nullable: true
+      description: Second parent ID (for births)
+      example: 3
 
-  details:
-    type: string
-    description: Extra event data (JSON or text)
-    example: "Born during lunar eclipse"
+    details:
+      type: string
+      description: Extra event data (JSON or text)
+      example: "Born during lunar eclipse"
 
-  created_at:
-    type: string
-    format: date-time
-    description: Record creation timestamp
-    example: 2125-01-01T10:00:00Z
+    created_at:
+      type: string
+      format: date-time
+      description: Record creation timestamp
+      example: 2125-01-01T10:00:00Z
 
-  updated_at:
-    type: string
-    format: date-time
-    description: Record last update
-    example: 2125-01-02T14:00:00Z
+    updated_at:
+      type: string
+      format: date-time
+      description: Record last update
+      example: 2125-01-02T14:00:00Z

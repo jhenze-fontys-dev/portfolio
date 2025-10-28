@@ -1,34 +1,35 @@
-type: object
-required:
-  - id
-  - type
-  - data
-properties:
-  id:
-    type: integer
-    description: Unique report ID
-    example: 1
+Report:
+  type: object
+  required:
+    - id
+    - type
+    - data
+  properties:
+    id:
+      type: integer
+      description: Unique report ID
+      example: 1
 
-  type:
-    type: string
-    description: Type of report (population, genetics, capacity, etc.)
-    example: population
+    type:
+      type: string
+      description: Type of report (population, genetics, capacity, etc.)
+      example: population
 
-  data:
-    type: object
-    description: JSON-encoded report data
-    example:
-      population: 850000
-      growth_rate: 0.03
+    data:
+      type: object
+      description: JSON-encoded report data
+      example:
+        population: 850000
+        growth_rate: 0.03
 
-  created_at:
-    type: string
-    format: date-time
-    description: Creation timestamp
-    example: 2125-01-01T10:00:00Z
+    created_at:
+      type: string
+      format: date-time
+      description: Creation timestamp
+      example: 2125-01-01T10:00:00Z
 
-  updated_at:
-    type: string
-    format: date-time
-    description: Last updated timestamp
-    example: 2125-01-02T14:00:00Z
+    updated_at:
+      type: string
+      format: date-time
+      description: Last updated timestamp
+      example: 2125-01-02T14:00:00Z

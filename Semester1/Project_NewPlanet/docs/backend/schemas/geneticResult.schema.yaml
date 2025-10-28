@@ -1,39 +1,40 @@
-type: object
-required:
-  - id
-  - citizen_a_id
-  - citizen_b_id
-  - coefficient
-properties:
-  id:
-    type: integer
-    description: Unique genetic result ID
-    example: 1
+GeneticResult:
+  type: object
+  required:
+    - id
+    - citizen_a_id
+    - citizen_b_id
+    - coefficient
+  properties:
+    id:
+      type: integer
+      description: Unique genetic result ID
+      example: 1
 
-  citizen_a_id:
-    type: integer
-    description: First citizen ID in comparison
-    example: 2
+    citizen_a_id:
+      type: integer
+      description: First citizen ID in comparison
+      example: 2
 
-  citizen_b_id:
-    type: integer
-    description: Second citizen ID in comparison
-    example: 3
+    citizen_b_id:
+      type: integer
+      description: Second citizen ID in comparison
+      example: 3
 
-  coefficient:
-    type: number
-    format: float
-    description: Inbreeding coefficient value
-    example: 0.0625
+    coefficient:
+      type: number
+      format: float
+      description: Inbreeding coefficient value
+      example: 0.0625
 
-  threshold:
-    type: number
-    format: float
-    description: Threshold value for warning
-    example: 0.1
+    threshold:
+      type: number
+      format: float
+      description: Threshold value for warning
+      example: 0.1
 
-  timestamp:
-    type: string
-    format: date-time
-    description: Calculation timestamp
-    example: 2125-01-01T10:00:00Z
+    timestamp:
+      type: string
+      format: date-time
+      description: Calculation timestamp
+      example: 2125-01-01T10:00:00Z
