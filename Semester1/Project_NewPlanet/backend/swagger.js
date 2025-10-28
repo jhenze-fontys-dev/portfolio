@@ -9,7 +9,9 @@ import YAML from 'yamljs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Resolve relative paths safely
+// -----------------------------------------------------------------------------
+// 📁 Path resolution
+// -----------------------------------------------------------------------------
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -49,7 +51,7 @@ const reportSchema = YAML.load(
 );
 
 // -----------------------------------------------------------------------------
-// ⚙️ Swagger Configuration
+// ⚙️ Swagger Options
 // -----------------------------------------------------------------------------
 const options = {
   definition: {
@@ -60,12 +62,14 @@ const options = {
       description:
         'API documentation for the New Planet Population Registry project, auto-generated from JSDoc annotations and YAML schemas.',
     },
+
     components: {
+      // -----------------------------------------------------------------------
+      // 🧩 Schemas
+      // -----------------------------------------------------------------------
       schemas: {
-        // Shared
         ErrorResponse: errorSchema.ErrorResponse,
 
-        // Entities
         Citizen: citizenSchema.Citizen,
         User: userSchema.User,
         Role: roleSchema.Role,
@@ -75,19 +79,47 @@ const options = {
         PlanetData: planetDataSchema.PlanetData,
         Report: reportSchema.Report,
       },
+
+      // -----------------------------------------------------------------------
+      // ⚠️ Common Response References
+      // -----------------------------------------------------------------------
+      responses: {
+        BadRequest: {
+          description: 'Invalid request or parameters.',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/ErrorResponse' },
+            },
+          },
+        },
+        NotFound: {
+          description: 'The requested resource was not found.',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/ErrorResponse' },
+            },
+          },
+        },
+        ServerError: {
+          description: 'An internal server error occurred.',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/ErrorResponse' },
+            },
+          },
+        },
+      },
     },
   },
 
   // ---------------------------------------------------------------------------
-  // 📂 Annotation Sources
+  // 📂 Sources for JSDoc Annotations
   // ---------------------------------------------------------------------------
-  apis: [
-    path.resolve(__dirname, '../docs/backend/annotations/*.doc.js'),
-  ],
+  apis: [path.resolve(__dirname, '../docs/backend/annotations/*.doc.js')],
 };
 
 // -----------------------------------------------------------------------------
-// 🧾 Export Swagger Spec
+// 🧾 Export Spec
 // -----------------------------------------------------------------------------
 const swaggerSpec = swaggerJsdoc(options);
 export default swaggerSpec;
