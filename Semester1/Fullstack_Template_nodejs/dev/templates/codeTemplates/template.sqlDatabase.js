@@ -86,6 +86,13 @@ export async function initSqlDatabase(models = []) {
       await sequelize.sync();
       console.log('All models synced successfully');
     }
+
+    // -------------------------------------------------------------------------
+    // ⚙️ Minor suggestion
+    // -------------------------------------------------------------------------
+    // Optionally return the Sequelize instance to allow advanced setups or
+    // programmatic control after initialization.
+    return sequelize;
   } catch (err) {
     console.error('Database initialization failed:', err.message);
   }
@@ -122,5 +129,5 @@ export default sequelize;
 //   /backend/data/json/jsonDataService.js
 //   /backend/data/mqtt/mqttDataService.js
 //
-// Each layer will be orchestrated by `dataServiceFactory.js` to unify access.
+// Each layer will be orchestrated by `dataSourceRegistry.js` to unify access.
 // -----------------------------------------------------------------------------
