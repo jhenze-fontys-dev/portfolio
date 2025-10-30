@@ -1,0 +1,28 @@
+Role:
+  type: object
+  required:
+    - id
+    - name
+  properties:
+    id:
+      type: integer
+      description: Unique identifier for the Role
+      example: 1
+
+    name:
+      type: string
+      enum: [citizen, civilServant, admin]
+      description: Role name defining user permissions
+      example: civilServant
+
+    created_at:
+      type: string
+      format: date-time
+      description: Record creation date
+      example: 2125-01-01T10:00:00Z
+
+    updated_at:
+      type: string
+      format: date-time
+      description: Last update date
+      example: 2125-01-02T14:00:00Z

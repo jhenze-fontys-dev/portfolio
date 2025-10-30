@@ -1,27 +1,28 @@
 {
   "name": "fullstack_template",
   "version": "1.0.0",
-  "description": "Template folder structure and template files for a fullstack website",
-  "type": "module",
-  "main": "server.js",
+  "private": true,
+  "description": "Fullstack Template project — scalable structure for Express backend and future React frontend.",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch --env-file=.env server.js"
-  },
-  "keywords": [],
-  "author": "Jack Henze",
-  "license": "MIT",
-  "dependencies": {
-    "colors": "^1.4.0",
-    "dotenv": "^17.2.3",
-    "express": "^5.1.0",
-    "sequelize": "^6.37.7",
-    "sqlite3": "^5.1.7",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1",
-    "yamljs": "^0.3.0"
+    "start:backend": "npm --prefix backend start",
+    "dev:backend": "npm --prefix backend run dev",
+    "db:init": "npm --prefix backend run db:init",
+    "start:frontend": "npm --prefix frontend start",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
-  }
+    "concurrently": "^9.0.0"
+  },
+  "keywords": [
+    "fullstack",
+    "express",
+    "react",
+    "template",
+    "sqlite",
+    "swagger"
+  ],
+  "author": "Jack Henze",
+  "license": "MIT",
+  "dependencies": {}
 }

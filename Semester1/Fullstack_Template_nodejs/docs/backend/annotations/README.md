@@ -1,19 +1,14 @@
-# 🗒️ Annotations
+# 📝 Annotations
+This folder includes **Swagger JSDoc annotations** for API endpoints.
+They are combined with YAML schemas to auto-generate the full OpenAPI documentation.
 
-This folder stores **JSDoc-style API annotations** that describe your Express routes.  
-These annotations are parsed by Swagger to generate live API documentation.
+📘 **Detailed documentation:**
+See [AnnotationsREADME.md](./annotations.README.md) for:
+- Annotation format and examples
+- Tagging conventions
+- Integration with the Swagger generator
 
-### Example
-```js
-/**
- * @openapi
- * /api/items:
- *   get:
- *     summary: Retrieve all items
- *     responses:
- *       200:
- *         description: Successful response
- */
-```
-
-Each `.doc.js` file should mirror a route file and define its OpenAPI specification.
+---
+**Related layers:**
+- [Schemas](../schemas/schemas.README.md)
+- [Routes](../../../routes/routes.README.md)
