@@ -60,11 +60,9 @@ function createHttpClient() {
     },
   });
 
-  // You can optionally add interceptors here:
   client.interceptors.response.use(
     (response) => response,
     (error) => {
-      // Simplify error structure, optionally log or transform
       console.error('[API] HTTP error:', error.message);
       return Promise.reject(error);
     }
@@ -91,33 +89,21 @@ export async function initializeApiDataService() {
   const client = createHttpClient();
   console.log(`[API] Initialized HTTP client for ${API_BASE_URL}`);
 
-  // Return standard interface
   return {
     client,
-    get: async (path, config = {}) => {
-      const response = await client.get(path, config);
-      return response.data;
-    },
-    post: async (path, body = {}, config = {}) => {
-      const response = await client.post(path, body, config);
-      return response.data;
-    },
-    put: async (path, body = {}, config = {}) => {
-      const response = await client.put(path, body, config);
-      return response.data;
-    },
-    delete: async (path, config = {}) => {
-      const response = await client.delete(path, config);
-      return response.data;
-    },
+    get: async (path, config = {}) => (await client.get(path, config)).data,
+    post: async (path, body = {}, config = {}) =>
+      (await client.post(path, body, config)).data,
+    put: async (path, body = {}, config = {}) =>
+      (await client.put(path, body, config)).data,
+    delete: async (path, config = {}) =>
+      (await client.delete(path, config)).data,
   };
 }
 
 // -----------------------------------------------------------------------------
 // 📦 Safe Default Export
 // -----------------------------------------------------------------------------
-// Ensures that import errors or HTTP initialization failures won’t crash the backend.
-
 let apiDataService = null;
 
 try {
@@ -138,18 +124,21 @@ export default apiDataService;
 // -----------------------------------------------------------------------------
 // 🧠 CODEX Template Notes
 // -----------------------------------------------------------------------------
-// When generating a new backend project, CODEX will:
+// When CODEX generates a new backend project:
 //
-// 1. Copy this file to `/backend/data/api/apiDataService.js`.
-// 2. Add `axios` to the backend `package.json` dependencies.
-// 3. Add `.env` configuration entries such as:
+// 1️⃣ CODEX will copy this file to `/backend/data/api/apiDataService.js`.
+// 2️⃣ It will add `axios` to the backend `package.json` dependencies.
+// 3️⃣ CODEX will populate `.env` with these entries:
 //
 //      DATA_SOURCES=sql,json,api
 //      API_BASE_URL=https://api.example.com
 //      API_TOKEN=yourtoken
 //      API_TIMEOUT_MS=5000
 //
-// 4. Register this service inside `/backend/data/factory/dataSourceRegistry.js`
-//    so that it is discoverable and usable alongside other sources.
+// 4️⃣ CODEX will automatically register this service inside
+//     `/backend/data/factory/dataSourceRegistry.js`.
+//
+// 5️⃣ The generated backend will then provide consistent access to
+//     external APIs alongside SQL, JSON, or MQTT data sources.
 //
 // -----------------------------------------------------------------------------

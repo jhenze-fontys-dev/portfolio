@@ -1,18 +1,16 @@
 // -----------------------------------------------------------------------------
 // 📡 MQTT Data Service Template (CODEX Reference)
 // -----------------------------------------------------------------------------
-// Provides a standard interface for connecting to and interacting with an
-// MQTT broker using the `mqtt` package. This template is fully compatible
-// with the multi-source backend design (SQL + JSON + MQTT + API).
+// Provides a unified interface for subscribing and publishing to MQTT topics.
+// Designed for hybrid backends that combine MQTT with SQL, JSON, or API sources.
 //
 // CODEX copies this file to `/backend/data/mqtt/mqttDataService.js`
-// when generating a new backend project.
+// during backend project generation.
 //
 // It handles:
-// - Connection setup via environment variables
-// - Topic subscriptions and message handling
-// - Publishing messages
-// - Graceful fallback on failure
+//  - Broker connection using environment configuration
+//  - Safe startup and reconnection
+//  - Graceful fallback if the MQTT broker is offline
 // -----------------------------------------------------------------------------
 //
 // 📂 Location: dev/templates/codeTemplates/template.mqttDataService.js
@@ -32,91 +30,85 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
 // -----------------------------------------------------------------------------
-// ⚙️ Configuration
+// ⚙️ MQTT Configuration
 // -----------------------------------------------------------------------------
-// Example environment variables:
+// Example .env entries:
 //
-//   MQTT_HOST=localhost
-//   MQTT_PORT=1883
-//   MQTT_PROTOCOL=mqtt
+//   DATA_SOURCES=sql,mqtt
+//   MQTT_BROKER_URL=mqtt://localhost:1883
 //   MQTT_USERNAME=user
-//   MQTT_PASSWORD=pass
-//   MQTT_TOPICS=sensor/temperature,sensor/humidity
+//   MQTT_PASSWORD=secret
+//   MQTT_CLIENT_ID=myAppClient
 //
-const MQTT_HOST = process.env.MQTT_HOST || 'localhost';
-const MQTT_PORT = process.env.MQTT_PORT || '1883';
-const MQTT_PROTOCOL = process.env.MQTT_PROTOCOL || 'mqtt';
+const MQTT_BROKER_URL = process.env.MQTT_BROKER_URL || 'mqtt://localhost:1883';
 const MQTT_USERNAME = process.env.MQTT_USERNAME || '';
 const MQTT_PASSWORD = process.env.MQTT_PASSWORD || '';
-const MQTT_TOPICS =
-  process.env.MQTT_TOPICS?.split(',').map((t) => t.trim()) || [];
+const MQTT_CLIENT_ID = process.env.MQTT_CLIENT_ID || 'codex_mqtt_client';
 
 // -----------------------------------------------------------------------------
-// 🧩 Connection Helper
+// 🚀 Initialize MQTT Client
 // -----------------------------------------------------------------------------
 export async function initializeMqttDataService() {
-  const brokerUrl = `${MQTT_PROTOCOL}://${MQTT_HOST}:${MQTT_PORT}`;
-
-  console.log(`[MQTT] Connecting to broker: ${brokerUrl}`);
-
-  const client = mqtt.connect(brokerUrl, {
-    username: MQTT_USERNAME || undefined,
-    password: MQTT_PASSWORD || undefined,
-  });
+  console.log('[MQTT] Initializing MQTT client...');
 
   return new Promise((resolve) => {
-    client.on('connect', () => {
-      console.log('[MQTT] Connected successfully');
+    try {
+      const client = mqtt.connect(MQTT_BROKER_URL, {
+        clientId: MQTT_CLIENT_ID,
+        username: MQTT_USERNAME,
+        password: MQTT_PASSWORD,
+        reconnectPeriod: 2000,
+      });
 
-      // Subscribe to predefined topics
-      MQTT_TOPICS.forEach((topic) => {
-        client.subscribe(topic, (err) => {
-          if (err) {
-            console.warn(`[MQTT] Failed to subscribe to ${topic}:`, err.message);
-          } else {
-            console.log(`[MQTT] Subscribed to topic: ${topic}`);
-          }
+      client.on('connect', () => {
+        console.log('[MQTT] Connected to broker at', MQTT_BROKER_URL);
+        resolve({
+          client,
+          publish: (topic, message) =>
+            client.publish(topic, JSON.stringify(message)),
+          subscribe: (topic, handler) => {
+            client.subscribe(topic);
+            client.on('message', (receivedTopic, payload) => {
+              if (receivedTopic === topic) {
+                try {
+                  handler(JSON.parse(payload.toString()));
+                } catch {
+                  handler(payload.toString());
+                }
+              }
+            });
+          },
         });
       });
 
-      // Handle incoming messages
-      client.on('message', (topic, message) => {
-        console.log(`[MQTT] Message from ${topic}: ${message.toString()}`);
+      client.on('error', (err) => {
+        console.error('[MQTT] Connection error:', err.message);
       });
-
-      // Return unified service interface
+    } catch (err) {
+      console.error('[MQTT] Initialization failed:', err.message);
       resolve({
-        client,
-        publish: (topic, payload) => client.publish(topic, payload),
-        subscribe: (topic, callback) => {
-          client.subscribe(topic);
-          client.on('message', (msgTopic, msg) => {
-            if (msgTopic === topic) callback(msg.toString());
-          });
-        },
-        disconnect: () => client.end(),
+        client: null,
+        publish: () => {},
+        subscribe: () => {},
       });
-    });
-
-    client.on('error', (err) => {
-      console.error('[MQTT] Connection error:', err.message);
-      resolve({ client: null, publish: () => {}, subscribe: () => {} });
-    });
+    }
   });
 }
 
 // -----------------------------------------------------------------------------
 // 📦 Safe Default Export
 // -----------------------------------------------------------------------------
-// Ensures that import errors or connection issues won’t crash the backend.
-
 let mqttDataService = null;
 
 try {
   mqttDataService = await initializeMqttDataService();
 } catch (err) {
   console.error('[MQTT] Initialization failed:', err.message);
-  mqttDataService = { client: null, publish: () => {}, subscribe: () => {} };
+  mqttDataService = {
+    client: null,
+    publish: () => {},
+    subscribe: () => {},
+  };
 }
 
 export default mqttDataService;
@@ -124,29 +116,22 @@ export default mqttDataService;
 // -----------------------------------------------------------------------------
 // 🧠 CODEX Template Notes
 // -----------------------------------------------------------------------------
-//
 // When CODEX generates a new backend project:
 //
-// 1️⃣ Copy this file to `/backend/data/mqtt/mqttDataService.js`
-// 2️⃣ Add `mqtt` to dependencies in `package.json`
-// 3️⃣ Add `.env` configuration entries:
+// 1️⃣ CODEX will copy this file to `/backend/data/mqtt/mqttDataService.js`.
+// 2️⃣ It will ensure `mqtt` is included in `package.json` dependencies.
+// 3️⃣ CODEX will populate `.env` with these entries:
 //
-//      DATA_SOURCES=sql,json,mqtt
-//      MQTT_HOST=localhost
-//      MQTT_PORT=1883
-//      MQTT_PROTOCOL=mqtt
-//      MQTT_TOPICS=sensor/temp,sensor/humidity
+//      DATA_SOURCES=sql,mqtt
+//      MQTT_BROKER_URL=mqtt://localhost:1883
+//      MQTT_USERNAME=user
+//      MQTT_PASSWORD=secret
+//      MQTT_CLIENT_ID=myAppClient
 //
-// 4️⃣ Automatically register this service inside
-//     `/backend/data/factory/dataSourceRegistry.js`
+// 4️⃣ CODEX will automatically register this service inside
+//     `/backend/data/factory/dataSourceRegistry.js`.
 //
-// -----------------------------------------------------------------------------
-// 💡 Optional minor enhancement (not required):
-// Add a convenience helper for future use:
+// 5️⃣ The generated backend will then support MQTT message streaming and
+//     hybrid data integration alongside SQL, JSON, and API sources.
 //
-// export function getDataSource(name) {
-//   return dataRegistry[name] || null;
-// }
-//
-// This will simplify controller access patterns later, but it’s optional.
 // -----------------------------------------------------------------------------
