@@ -50,7 +50,10 @@ Fullstack_Template/
 ├── dev/
 │   ├── templates/
 │   │   ├── codeTemplates
+│   │   │   ├── template.apiDataService.js
 │   │   │   ├── template.dataSourceRegistry.js
+│   │   │   ├── template.jsonDataService.js
+│   │   │   ├── template.mqttDataService.js
 │   │   │   ├── template.sqlDatabase.js
 │   │   │   ├── template.sqlDataService.js
 │   │   │   └── 
