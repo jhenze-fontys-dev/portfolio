@@ -7,7 +7,7 @@ Fullstack_Template/
 │   │   └── 
 │   ├── data/
 │   │   ├── factory/
-│   │   │   ├── 
+│   │   │   ├── dataSourceRegistry.js
 │   │   │   └──
 │   │   ├── json/
 │   │   │   ├── jsonDataService.js
