@@ -6,11 +6,14 @@ Fullstack_Template/
 │   │   ├── 
 │   │   └── 
 │   ├── data/
+│   │   ├── api/
+│   │   │   ├── 
+│   │   │   └──
 │   │   ├── factory/
-│   │   │   ├── dataSourceRegistry.js
+│   │   │   ├── 
 │   │   │   └──
 │   │   ├── json/
-│   │   │   ├── jsonDataService.js
+│   │   │   ├── 
 │   │   │   └──
 │   │   ├── mqtt/
 │   │   │   ├── 
@@ -22,11 +25,10 @@ Fullstack_Template/
 │   │   │   ├── services/
 │   │   │   │   ├── 
 │   │   │   │   └──
-│   │   │   ├── database.js
-│   │   │   ├── db.js
+│   │   │   ├── 
 │   │   │   └──
 │   │   ├── 
-│   │   └── dataServiceFactory.js
+│   │   └── 
 │   ├── middleware/
 │   │   ├── errorResponse.js
 │   │   ├── index.js
@@ -47,6 +49,11 @@ Fullstack_Template/
 │
 ├── dev/
 │   ├── templates/
+│   │   ├── codeTemplates
+│   │   │   ├── template.dataSourceRegistry.js
+│   │   │   ├── template.sqlDatabase.js
+│   │   │   ├── template.sqlDataService.js
+│   │   │   └── 
 │   │   ├── readmeTemplates
 │   │   │   ├── annotations.README.md
 │   │   │   ├── controller.README.md
@@ -93,4 +100,5 @@ Fullstack_Template/
 ├── public/
 │   ├── 
 │   └── 
-│
+├── 
+└── 
