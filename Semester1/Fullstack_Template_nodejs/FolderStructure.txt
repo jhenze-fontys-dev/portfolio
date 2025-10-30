@@ -1,0 +1,96 @@
+
+
+Fullstack_Template/
+├── backend/
+│   ├── controllers/
+│   │   ├── 
+│   │   └── 
+│   ├── data/
+│   │   ├── factory/
+│   │   │   ├── 
+│   │   │   └──
+│   │   ├── json/
+│   │   │   ├── jsonDataService.js
+│   │   │   └──
+│   │   ├── mqtt/
+│   │   │   ├── 
+│   │   │   └──
+│   │   ├── sql/
+│   │   │   ├── models/
+│   │   │   │   ├── 
+│   │   │   │   └──
+│   │   │   ├── services/
+│   │   │   │   ├── 
+│   │   │   │   └──
+│   │   │   ├── database.js
+│   │   │   ├── db.js
+│   │   │   └──
+│   │   ├── 
+│   │   └── dataServiceFactory.js
+│   ├── middleware/
+│   │   ├── errorResponse.js
+│   │   ├── index.js
+│   │   ├── logger.js
+│   │   ├── notFound.js
+│   │   └── 
+│   ├── node_modules/
+│   ├── routes/
+│   │   ├── 
+│   │   └── 
+│   ├── views/
+│   ├── apiEndpoints.README.md
+│   ├── backend.README.md
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── server.js
+│   └── swagger.js
+│
+├── dev/
+│   ├── templates/
+│   │   ├── readmeTemplates
+│   │   │   ├── annotations.README.md
+│   │   │   ├── controller.README.md
+│   │   │   ├── folder.README.md
+│   │   │   ├── models.README.md
+│   │   │   ├── routes.README.md
+│   │   │   ├── schemas.README.md
+│   │   │   ├── services.README.md
+│   │   │   └── 
+│   │   ├── 
+│   │   └── 
+│   ├── 
+│   └── 
+│
+├── docs/
+│   ├── backend/
+│   │   │   ├── annotations/
+│   │   │   │   ├──
+│   │   │   │   └──
+│   │   │   ├── jsdocs/
+│   │   │   ├── schemas/
+│   │   │   │   │   ├── shared/
+│   │   │   │   │   │   ├── errorResponse.schema.yaml
+│   │   │   │   │   │   ├── errorResponse.schema.yaml
+│   │   │   │   │   │   ├── parameters.schema.yaml
+│   │   │   │   │   │   └──
+│   │   │   │   │   ├── template.schema.yaml
+│   │   │   │   │   └──
+│   │   │   │   ├──
+│   │   │   │   └──
+│   │   │   └──
+│   │   ├── 
+│   │   └──
+│   │   frontend/
+│   │   ├── 
+│   │   └──
+│   ├── 
+│   └── 
+│
+├── frontend/
+│   ├── 
+│   └── 
+│
+├── public/
+│   ├── 
+│   └── 
+│
