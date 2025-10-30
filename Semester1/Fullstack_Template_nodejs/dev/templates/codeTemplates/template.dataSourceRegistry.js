@@ -101,6 +101,15 @@ if (activeSources.includes('api')) {
 export default dataRegistry;
 
 // -----------------------------------------------------------------------------
+// 💡 Optional minor enhancement
+// -----------------------------------------------------------------------------
+// Convenience helper for controller-level access.
+// Example: const sql = getDataSource('sql');
+export function getDataSource(name) {
+  return dataRegistry[name] || null;
+}
+
+// -----------------------------------------------------------------------------
 // 🧠 CODEX Template Notes
 // -----------------------------------------------------------------------------
 // When CODEX generates a backend project, it will:
