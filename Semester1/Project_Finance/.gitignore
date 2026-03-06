@@ -1,0 +1,71 @@
+# -----------------------------------------------------------------------------
+# Node dependencies & logs
+# -----------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# -----------------------------------------------------------------------------
+# OS / editor junk
+# -----------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# -----------------------------------------------------------------------------
+# Local environment files
+# -----------------------------------------------------------------------------
+.env
+.env.local
+
+# -----------------------------------------------------------------------------
+# Databases (local / generated)
+# -----------------------------------------------------------------------------
+backend/data/sql/*.db
+
+# -----------------------------------------------------------------------------
+# Generated backend artifacts
+# -----------------------------------------------------------------------------
+backend/data/sql/models/
+backend/data/sql/services/
+backend/controllers/
+backend/routes/sql/
+backend/routes/generated.routes.js
+
+backend/config/envLoader.js
+backend/data/factory/dataSourceRegistry.js
+backend/data/sql/sqlDatabase.js
+backend/data/sql/sql.driver.js
+dev/config/metadataStructure.json
+
+# -----------------------------------------------------------------------------
+# Generated documentation artifacts
+# -----------------------------------------------------------------------------
+docs/backend/generated/openapi/
+docs/backend/generated/api.md
+docs/backend/generated/models.md
+docs/backend/generated/routes.md
+docs/backend/generated/services.md
+
+docs/internal/
+
+docs/logs/
+
+# -----------------------------------------------------------------------------
+# SQL-injection testing artefacts
+# -----------------------------------------------------------------------------
+docs/backend/testing/sqlscan/*.json
+docs/backend/testing/sqlscan/index.json
+
+# -----------------------------------------------------------------------------
+# Temporary / cache folders (future-proofing)
+# -----------------------------------------------------------------------------
+tmp/
+.cache/
+coverage/
+dist/
+build/

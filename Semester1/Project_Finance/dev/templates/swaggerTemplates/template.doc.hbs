@@ -1,0 +1,49 @@
+<!-- -----------------------------------------------------------------------------
+AUTO-GENERATED PROJECT DOCUMENTATION
+
+Generator  : dev/generators/generate.doc.js
+Template   : dev/templates/docTemplates/template.doc.hbs
+
+This file is auto-generated. Any manual changes will be overwritten.
+----------------------------------------------------------------------------- -->
+
+# Project API Documentation
+
+## Overview
+
+This document is generated automatically from:
+
+- dev/config/metadataStructure.json
+- Active generators and templates
+
+It reflects the current state of the backend API and data model.
+
+---
+
+## Data Sources
+
+{{#each dataSources}}
+- {{this}}
+{{/each}}
+
+---
+
+## Entities
+
+{{#each entities}}
+### {{name}}
+
+- Table       : {{tableName}}
+- Primary Key: {{primaryKey}}
+
+#### Fields
+{{#each fields}}
+- {{name}} ({{typeNeutral}})
+{{/each}}
+
+---
+{{/each}}
+
+<!-- -----------------------------------------------------------------------------
+End of auto-generated documentation
+----------------------------------------------------------------------------- -->

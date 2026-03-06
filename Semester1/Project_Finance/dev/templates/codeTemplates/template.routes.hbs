@@ -1,0 +1,36 @@
+// -----------------------------------------------------------------------------
+// AUTO-GENERATED FILE — DO NOT EDIT
+//
+// File       : backend/routes/{{sourceType}}/{{dialect}}/{{sourceKey}}.{{entityName}}.routes.js
+// Generator  : dev/generators/generate.routes.js
+// Template   : dev/templates/codeTemplates/template.routes.hbs
+// Notes      : Express routes for {{entityName}}. Maps HTTP endpoints to controller functions.
+//
+// Source     : {{sourceType}} | {{sourceKey}}
+// Entity     : {{entityName}}
+//
+// This file is auto-generated. Any manual changes will be overwritten.
+// -----------------------------------------------------------------------------
+
+import express from 'express';
+import * as controller from '{{controllerImportPath}}';
+
+export const basePath = '{{routeBase}}';
+
+const router = express.Router();
+
+// IMPORTANT: Put /search before /:id
+router.get('/search', controller.search);
+
+router.get('/', controller.getAll);
+router.get('/:id', controller.getById);
+
+router.post('/', controller.create);
+router.put('/:id', controller.update);
+router.delete('/:id', controller.remove);
+
+export default router;
+
+// -----------------------------------------------------------------------------
+// End of auto-generated routes for {{entityName}}
+// -----------------------------------------------------------------------------

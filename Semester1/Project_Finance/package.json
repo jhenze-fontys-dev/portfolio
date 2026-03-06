@@ -1,0 +1,78 @@
+{
+  "name": "fullstack-studio",
+  "version": "2.0.0",
+  "description": "Fullstack Studio — metadata-driven backend generation platform for multi-source data architectures.",
+
+  "author": "Jack Henze",
+  "homepage": "https://fullstackstudio.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jhenze-dev/fullstack-studio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jhenze-dev/fullstack-studio/issues"
+  },
+  "license": "SEE LICENSE IN LICENSE.md",
+
+  "type": "module",
+  "main": "index.mjs",
+  "files": [
+    "index.mjs",
+    "README.md",
+    "LICENSE.md",
+    "LICENSE.BSL1.1.md",
+    "LICENSE.COMMERCIAL.md"
+  ],
+
+  "keywords": [
+    "nodejs",
+    "backend",
+    "framework",
+    "code-generation",
+    "openapi",
+    "swagger",
+    "sqlite",
+    "express",
+    "template"
+  ],
+
+  "scripts": {
+    "dev": "npm run dev:backend",
+    "dev:backend": "npm --prefix backend run dev",
+    "start:backend": "npm --prefix backend start",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "start:frontend": "npm --prefix frontend start",
+
+    "gen:metadata": "node dev/generators/generate.metadataStructure.js",
+    "gen:env": "node dev/generators/generate.env.js",
+    "gen:sql-database": "node dev/generators/generate.sqlDatabase.js",
+    "gen:drivers": "node dev/generators/generate.drivers.js",
+    "gen:registry": "node dev/generators/generate.dataSourceRegistry.js",
+    "gen:models": "node dev/generators/generate.models.js",
+    "gen:services": "node dev/generators/generate.services.js",
+    "gen:controllers": "node dev/generators/generate.controllers.js",
+    "gen:routes": "node dev/generators/generate.routes.js",
+    "gen:route-registry": "node dev/generators/generate.routeRegistry.js",
+    "gen:openapi": "node dev/generators/generate.openAPI.js",
+    "gen:all": "npm run gen:metadata && npm run gen:env && npm run gen:sql-database && npm run gen:drivers && npm run gen:registry && npm run gen:models && npm run gen:services && npm run gen:controllers && npm run gen:routes && npm run gen:route-registry && npm run gen:openapi",
+
+    "doc:tree": "node dev/tools/docs/generate.tree.js",
+    "doc:paths": "node dev/tools/docs/generate.paths.js",
+    "doc:bundle": "node dev/tools/docs/doc.bundleAll.js",
+
+    "reset:generated": "node dev/tools/reset/reset.generated.js && npm run doc:tree && npm run doc:paths",
+    "reset:db": "node dev/tools/reset/reset.db.js",
+    "reset:all": "npm run reset:generated && npm run reset:db",
+
+    "test:sql-injection": "node dev/tools/testing/test.sqlInjection.js"
+  },
+
+  "dependencies": {
+    "sqlite3": "^5.1.7"
+  },
+
+  "devDependencies": {
+    "concurrently": "^9.0.0",
+    "handlebars": "^4.7.8"
+  }
+}

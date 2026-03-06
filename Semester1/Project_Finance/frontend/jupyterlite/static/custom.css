@@ -1,0 +1,21 @@
+﻿/* Verberg de bovenste headerbalk (waar het JupyterLite logo staat) */
+#jp-top-panel,
+.jp-TopBar,
+.jp-LabShell-header {
+  display: none !important;
+}
+
+/* Zorg dat er geen lege ruimte bovenin overblijft */
+.jp-LabShell {
+  top: 0 !important;
+}
+/* Verberg de tab-balk (document tabs) */
+.jp-DockPanel-tabBar,
+.jp-DockPanel-tabBars {
+  display: none !important;
+}
+
+/* Extra: haal de ruimte van de tab-balk weg */
+.jp-DockPanel {
+  --jp-private-horizontal-tabbar-height: 0px;
+}

@@ -1,0 +1,85 @@
+// -----------------------------------------------------------------------------
+// AUTO-GENERATED FILE — DO NOT EDIT
+//
+// File       : backend/data/{{sourceType}}/services/{{dialect}}/{{sourceKey}}.{{entityName}}.service.js
+// Generator  : dev/generators/generate.services.js
+// Template   : dev/templates/codeTemplates/template.service.hbs
+// Notes      : Service layer for {{entityName}}. Provides safe CRUD using driver + metadata.
+//
+// Source     : {{sourceType}} | {{sourceKey}}
+// Entity     : {{entityName}}
+//
+// This file is auto-generated. Any manual changes will be overwritten.
+// -----------------------------------------------------------------------------
+
+import model from '{{modelImportPath}}';
+import dataSourceRegistry from '{{registryImportPath}}';
+
+// Resolve driver by source type (sql/json/mqtt/api)
+const driver = dataSourceRegistry[model.source.type];
+
+if (!driver) {
+  throw new Error(
+    `No driver registered for source type "${model.source.type}" in service {{entityName}}`
+  );
+}
+
+// -----------------------------------------------------------------------------
+// CRUD
+// -----------------------------------------------------------------------------
+
+export async function getAll(options = {}) {
+  return driver.getAll({
+    model,
+    ...options,
+  });
+}
+
+export async function getById(id) {
+  return driver.getById({
+    model,
+    id,
+  });
+}
+
+export async function create(payload) {
+  if (!payload || typeof payload !== 'object') {
+    throw new Error('create() requires a payload object');
+  }
+
+  return driver.create({
+    model,
+    payload,
+  });
+}
+
+export async function update(id, payload) {
+  if (!payload || typeof payload !== 'object') {
+    throw new Error('update() requires a payload object');
+  }
+
+  return driver.update({
+    model,
+    id,
+    payload,
+  });
+}
+
+export async function remove(id) {
+  return driver.remove({
+    model,
+    id,
+  });
+}
+
+export async function search(filters = {}, options = {}) {
+  return driver.search({
+    model,
+    filters,
+    ...options,
+  });
+}
+
+// -----------------------------------------------------------------------------
+// End of auto-generated service for {{entityName}}
+// -----------------------------------------------------------------------------

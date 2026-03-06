@@ -1,0 +1,145 @@
+// -----------------------------------------------------------------------------
+// AUTO-GENERATED FILE — DO NOT EDIT
+//
+// File       : backend/data/sql/sqlDatabase.js
+// Generator  : dev/generators/generate.sqlDatabase.js
+// Template   : dev/templates/codeTemplates/template.sqlDatabase.hbs
+// Notes      : SQL database connection manager. Initializes and caches database connections per dialect.
+//
+// This file is auto-generated. Any manual changes will be overwritten.
+// -----------------------------------------------------------------------------
+
+import sqlite3 from 'sqlite3';
+import pkg from 'pg';
+const { Pool } = pkg;
+
+// -----------------------------------------------------------------------------
+// SQL source configuration (from metadata)
+// -----------------------------------------------------------------------------
+
+const SQL_SOURCES = [
+{{#each sources}}
+  {
+    sourceKey: '{{sourceKey}}',
+    dialect: '{{dialect}}',
+    databaseName: '{{databaseName}}',
+    env: {{json env}}
+  },
+{{/each}}
+];
+
+// Active connections (one per sourceKey)
+const connections = new Map();
+
+// -----------------------------------------------------------------------------
+// Helpers
+// -----------------------------------------------------------------------------
+
+function listSqlSources() {
+  return SQL_SOURCES.map(s => s.sourceKey);
+}
+
+function findSource(sourceKey) {
+  if (!sourceKey) {
+    throw new Error(
+      'SQL sourceKey is required. No default SQL source is defined.'
+    );
+  }
+
+  const source = SQL_SOURCES.find(s => s.sourceKey === sourceKey);
+
+  if (!source) {
+    throw new Error(
+      `Unknown SQL sourceKey: ${sourceKey}. Known sources: ${listSqlSources().join(', ')}`
+    );
+  }
+
+  return source;
+}
+
+// -----------------------------------------------------------------------------
+// Connection lifecycle
+// -----------------------------------------------------------------------------
+
+async function connectAllSqlSources() {
+  for (const source of SQL_SOURCES) {
+    if (connections.has(source.sourceKey)) continue;
+
+    if (source.dialect === 'sqlite') {
+      const file = process.env[source.env.dbFile];
+      if (!file) {
+        throw new Error(`Missing env var for SQLite DB file: ${source.env.dbFile}`);
+      }
+
+      const db = new sqlite3.Database(file);
+      connections.set(source.sourceKey, db);
+      continue;
+    }
+
+    if (source.dialect === 'postgres') {
+      const pool = new Pool({
+        host: process.env[source.env.host],
+        port: Number(process.env[source.env.port]),
+        database: process.env[source.env.name],
+        user: process.env[source.env.user],
+        password: process.env[source.env.password],
+      });
+
+      // Fail fast
+      await pool.query('SELECT 1');
+      connections.set(source.sourceKey, pool);
+      continue;
+    }
+
+    throw new Error(`Unsupported SQL dialect: ${source.dialect}`);
+  }
+}
+
+async function closeAllSqlConnections() {
+  for (const [key, conn] of connections.entries()) {
+    if (conn?.close) {
+      await new Promise(resolve => conn.close(resolve));
+    }
+    if (conn?.end) {
+      await conn.end();
+    }
+    connections.delete(key);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Accessors
+// -----------------------------------------------------------------------------
+
+function getSqlConnection(sourceKey) {
+  const source = findSource(sourceKey);
+  return connections.get(source.sourceKey);
+}
+
+function getSqlConnectionMap() {
+  return connections;
+}
+
+// -----------------------------------------------------------------------------
+// Exports
+// -----------------------------------------------------------------------------
+
+export {
+  connectAllSqlSources,
+  closeAllSqlConnections,
+  listSqlSources,
+  getSqlConnection,
+  getSqlConnectionMap
+};
+
+export default {
+  connectAllSqlSources,
+  closeAllSqlConnections,
+  listSqlSources,
+  getSqlConnection,
+  getSqlConnectionMap
+};
+
+// -----------------------------------------------------------------------------
+// End of auto-generated SQL database module
+// -----------------------------------------------------------------------------

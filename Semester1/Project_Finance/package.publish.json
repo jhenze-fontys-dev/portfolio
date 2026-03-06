@@ -1,0 +1,29 @@
+{
+  "name": "fullstack-studio",
+  "version": "2.0.0",
+  "description": "Fullstack Studio — metadata-driven backend generation platform (package name reserved during development).",
+
+  "author": "Jack Henze",
+  "homepage": "https://fullstackstudio.io",
+  "repository": "https://github.com/jhenze-dev/fullstack-studio",
+  "bugs": "https://github.com/jhenze-dev/fullstack-studio/issues",
+  "license": "SEE LICENSE IN LICENSE.md",
+
+  "type": "module",
+  "main": "index.mjs",
+
+  "files": [
+    "index.mjs",
+    "README.md",
+    "LICENSE.md",
+    "LICENSE.BSL1.1.md",
+    "LICENSE.COMMERCIAL.md"
+  ],
+
+  "keywords": [
+    "fullstack",
+    "project-template",
+    "backend",
+    "code-generation"
+  ]
+}

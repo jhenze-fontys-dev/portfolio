@@ -1,0 +1,82 @@
+// -----------------------------------------------------------------------------
+// AUTO-GENERATED FILE — DO NOT EDIT
+//
+// File       : backend/routes/generated.routes.js
+// Generator  : dev/generators/generate.routeRegistry.js
+// Template   : dev/templates/codeTemplates/template.routeRegistry.hbs
+// Notes      : Central registry that mounts all generated route modules onto an Express app.
+//
+// This file is auto-generated. Any manual changes will be overwritten.
+// -----------------------------------------------------------------------------
+
+
+{{#if hasSql}}
+// SQL route modules (generated)
+{{#each sqlRouteImports}}
+import * as {{varName}} from '{{importPath}}';
+{{/each}}
+{{/if}}
+
+{{#if hasJson}}
+// JSON route modules (generated)
+{{#each jsonRouteImports}}
+import * as {{varName}} from '{{importPath}}';
+{{/each}}
+{{/if}}
+
+{{#if hasMqtt}}
+// MQTT route modules (generated)
+{{#each mqttRouteImports}}
+import * as {{varName}} from '{{importPath}}';
+{{/each}}
+{{/if}}
+
+{{#if hasApi}}
+// API route modules (generated)
+{{#each apiRouteImports}}
+import * as {{varName}} from '{{importPath}}';
+{{/each}}
+{{/if}}
+
+
+// Register all generated routes onto an Express app instance.
+// Each route module exports:
+//   - basePath (string)  -> mount prefix
+//   - default (router)   -> Express Router instance
+export default function registerGeneratedRoutes(app) {
+  if (!app || typeof app.use !== 'function') {
+    throw new Error('registerGeneratedRoutes(app) requires an Express app');
+  }
+
+  {{#if hasSql}}
+  // SQL
+  {{#each sqlRouteImports}}
+  app.use({{varName}}.basePath, {{varName}}.default);
+  {{/each}}
+  {{/if}}
+
+  {{#if hasJson}}
+  // JSON
+  {{#each jsonRouteImports}}
+  app.use({{varName}}.basePath, {{varName}}.default);
+  {{/each}}
+  {{/if}}
+
+  {{#if hasMqtt}}
+  // MQTT
+  {{#each mqttRouteImports}}
+  app.use({{varName}}.basePath, {{varName}}.default);
+  {{/each}}
+  {{/if}}
+
+  {{#if hasApi}}
+  // API
+  {{#each apiRouteImports}}
+  app.use({{varName}}.basePath, {{varName}}.default);
+  {{/each}}
+  {{/if}}
+}
+
+// -----------------------------------------------------------------------------
+// End of auto-generated route registry
+// -----------------------------------------------------------------------------

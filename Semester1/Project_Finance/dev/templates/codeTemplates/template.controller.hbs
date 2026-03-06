@@ -1,0 +1,192 @@
+// -----------------------------------------------------------------------------
+// AUTO-GENERATED FILE — DO NOT EDIT
+//
+// File       : backend/controllers/{{sourceType}}/{{dialect}}/{{sourceKey}}.{{entityName}}.controller.js
+// Generator  : dev/generators/generate.controllers.js
+// Template   : dev/templates/codeTemplates/template.controller.hbs
+// Notes      : Controller for {{entityName}}. Handles HTTP requests and delegates to service layer.
+//
+// Source     : {{sourceType}} | {{sourceKey}}
+// Entity     : {{entityName}}
+//
+// This file is auto-generated. Any manual changes will be overwritten.
+// -----------------------------------------------------------------------------
+
+import * as {{serviceVarName}} from '{{serviceImportPath}}';
+import { createError } from '{{errorImportPath}}';
+
+/**
+ * Convert common DB constraint errors into proper HTTP errors.
+ * Keeps controllers clean and avoids editing generated code per entity.
+ */
+function mapDbError(err, fallbackMessage) {
+  // If upstream error already has a statusCode, respect it.
+  if (err?.statusCode) return err;
+
+  const msg = String(err?.message || '');
+  const lower = msg.toLowerCase();
+
+  // SQLite / Sequelize unique constraint
+  // Examples:
+  // - SQLITE_CONSTRAINT: UNIQUE constraint failed: watchlist.user_id, watchlist.symbol_id
+  // - SequelizeUniqueConstraintError
+  if (
+    lower.includes('unique constraint') ||
+    lower.includes('unique constraint failed') ||
+    (lower.includes('sqlite_constraint') && lower.includes('unique')) ||
+    err?.name === 'SequelizeUniqueConstraintError'
+  ) {
+    return createError('{{entityName}} already exists', 409);
+  }
+
+  // Foreign key constraint
+  if (
+    lower.includes('foreign key') ||
+    (lower.includes('sqlite_constraint') && lower.includes('foreign'))
+  ) {
+    return createError('Invalid reference (foreign key)', 400);
+  }
+
+  // Not-null constraint (optional)
+  if (lower.includes('not null')) {
+    return createError('Missing required field', 400);
+  }
+
+  // Fallback: keep the old behavior (500) but log the real error for dev
+  console.error('Controller error ({{entityName}}):', err);
+  return createError(fallbackMessage, 500);
+}
+
+// -----------------------------
+// Query helpers (pagination/sort)
+// -----------------------------
+function parseIntParam(v) {
+  if (v === undefined || v === null || v === '') return undefined;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : undefined;
+}
+
+function pickListOptions(query = {}) {
+  const limit = parseIntParam(query.limit);
+  const offset = parseIntParam(query.offset);
+  const orderBy = query.orderBy ? String(query.orderBy) : undefined;
+  const orderDir = query.orderDir ? String(query.orderDir) : undefined;
+
+  const opts = {};
+  if (limit !== undefined) opts.limit = limit;
+  if (offset !== undefined) opts.offset = offset;
+  if (orderBy) opts.orderBy = orderBy;
+  if (orderDir) opts.orderDir = orderDir;
+  return opts;
+}
+
+// GET {{routeBase}}
+export async function getAll(req, res, next) {
+  try {
+    const options = pickListOptions(req.query || {});
+    const records = await {{serviceVarName}}.getAll(options);
+    res.status(200).json(records);
+  } catch (err) {
+    next(mapDbError(err, 'Failed to load {{entityName}} data'));
+  }
+}
+
+// GET {{routeBase}}/:id
+export async function getById(req, res, next) {
+  try {
+    const { id: idParam } = req.params;
+
+    // Keep generic (no numeric assumption)
+    if (!idParam || typeof idParam !== 'string') {
+      return next(createError('Invalid ID parameter', 400));
+    }
+
+    const record = await {{serviceVarName}}.getById(idParam);
+
+    if (!record) {
+      return next(createError('{{entityName}} not found', 404));
+    }
+
+    res.status(200).json(record);
+  } catch (err) {
+    next(mapDbError(err, 'Failed to load {{entityName}}'));
+  }
+}
+
+// POST {{routeBase}}
+export async function create(req, res, next) {
+  try {
+    const payload = req.body;
+
+    if (!payload || Object.keys(payload).length === 0) {
+      return next(createError('Request body is required', 400));
+    }
+
+    const created = await {{serviceVarName}}.create(payload);
+    res.status(201).json(created);
+  } catch (err) {
+    next(mapDbError(err, 'Failed to create {{entityName}}'));
+  }
+}
+
+// PUT {{routeBase}}/:id
+export async function update(req, res, next) {
+  try {
+    const { id: idParam } = req.params;
+
+    if (!idParam || typeof idParam !== 'string') {
+      return next(createError('Invalid ID parameter', 400));
+    }
+
+    const payload = req.body;
+
+    const updated = await {{serviceVarName}}.update(idParam, payload);
+    if (!updated) {
+      return next(createError('{{entityName}} not found', 404));
+    }
+
+    res.status(200).json(updated);
+  } catch (err) {
+    next(mapDbError(err, 'Failed to update {{entityName}}'));
+  }
+}
+
+// DELETE {{routeBase}}/:id
+export async function remove(req, res, next) {
+  try {
+    const { id: idParam } = req.params;
+
+    if (!idParam || typeof idParam !== 'string') {
+      return next(createError('Invalid ID parameter', 400));
+    }
+
+    const result = await {{serviceVarName}}.remove(idParam);
+
+    if (!result) {
+      return next(createError('{{entityName}} not found', 404));
+    }
+
+    res.status(200).json(result);
+  } catch (err) {
+    next(mapDbError(err, 'Failed to delete {{entityName}}'));
+  }
+}
+
+// GET {{routeBase}}/search
+export async function search(req, res, next) {
+  try {
+    const query = req.query || {};
+    const { limit, offset, orderBy, orderDir, ...filters } = query;
+
+    const options = pickListOptions({ limit, offset, orderBy, orderDir });
+    const results = await {{serviceVarName}}.search(filters, options);
+
+    res.status(200).json(results);
+  } catch (err) {
+    next(mapDbError(err, 'Failed to search {{entityName}}'));
+  }
+}
+
+// -----------------------------------------------------------------------------
+// End of auto-generated controller for {{entityName}}
+// -----------------------------------------------------------------------------

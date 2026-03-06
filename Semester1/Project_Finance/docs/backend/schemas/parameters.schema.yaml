@@ -1,0 +1,15 @@
+parameters:
+  IdPathParam:
+    name: id
+    in: path
+    required: true
+    description: Unique identifier of the resource.
+    schema:
+      type: integer
+      example: 1
+  PageQuery:
+    name: page
+    in: query
+    schema:
+      type: integer
+      example: 1

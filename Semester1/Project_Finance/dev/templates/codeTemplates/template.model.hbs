@@ -1,0 +1,61 @@
+// -----------------------------------------------------------------------------
+// AUTO-GENERATED FILE — DO NOT EDIT
+//
+// File       : backend/data/{{sourceType}}/models/{{dialect}}/{{sourceKey}}.{{entityName}}.model.js
+// Generator  : dev/generators/generate.models.js
+// Template   : dev/templates/codeTemplates/template.model.hbs
+// Notes      : Metadata-only model (NOT an ORM model). Used by services/controllers.
+//
+// Source     : {{sourceType}} | {{sourceKey}}
+// Entity     : {{entityName}}
+//
+// This file is auto-generated. Any manual changes will be overwritten.
+// -----------------------------------------------------------------------------
+
+
+const model = {
+  // Source identity (universal)
+  source: {
+    type: '{{sourceType}}',
+    key: '{{sourceKey}}',
+
+    {{#if dialect}}
+    dialect: '{{dialect}}',
+    {{/if}}
+
+    {{#if databaseName}}
+    databaseName: '{{databaseName}}',
+    {{/if}}
+  },
+
+  // Entity identity (universal)
+  entity: {
+    name: '{{entityName}}'
+  },
+
+  // SQL-specific metadata (present when source.type === "sql")
+  {{#if isSql}}
+  sql: {
+    tableName: '{{tableName}}',
+    primaryKey: '{{primaryKey}}',
+
+    columns: [
+      {{#each columns}}
+      {
+        name: '{{name}}',
+        type: '{{type}}',
+        notNull: {{#if notNull}}true{{else}}false{{/if}},
+        primaryKey: {{#if primaryKey}}true{{else}}false{{/if}},
+        defaultValue: {{{json defaultValue}}},
+      },
+      {{/each}}
+    ],
+  },
+  {{/if}}
+};
+
+export default model;
+
+// -----------------------------------------------------------------------------
+// End of auto-generated model for {{entityName}}
+// -----------------------------------------------------------------------------

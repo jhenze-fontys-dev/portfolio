@@ -1,0 +1,1 @@
+# Explains templating or rendering

@@ -1,0 +1,171 @@
+// -----------------------------------------------------------------------------
+// AUTO-GENERATED FILE — DO NOT EDIT
+//
+// File       : backend/data/sql/sql.driver.js
+// Generator  : dev/generators/generate.drivers.js
+// Template   : dev/templates/codeTemplates/template.sqlDriver.hbs
+// Notes      : SQL driver. Loads metadata and creates dialect-specific connections used by services/controllers.
+//
+// This file is auto-generated. Any manual changes will be overwritten.
+// -----------------------------------------------------------------------------
+
+import fs from 'fs';
+import path from 'path';
+import { Sequelize } from 'sequelize';
+
+// -----------------------------------------------------------------------------
+// Metadata loader (works from project root AND backend runtime)
+// -----------------------------------------------------------------------------
+
+function resolveMetadataPath() {
+  const candidates = [
+    // When running generators (cwd = project root)
+    path.resolve(process.cwd(), 'dev/config/metadataStructure.json'),
+
+    // When running backend (cwd = backend/)
+    path.resolve(process.cwd(), '../dev/config/metadataStructure.json'),
+  ];
+
+  for (const p of candidates) {
+    if (fs.existsSync(p)) return p;
+  }
+
+  throw new Error(
+    `SQL driver cannot load metadataStructure.json. Missing file. Tried:\n` +
+      candidates.map((c) => `- ${c}`).join('\n'),
+  );
+}
+
+function loadMetadataStructure() {
+  const metadataPath = resolveMetadataPath();
+  const raw = fs.readFileSync(metadataPath, 'utf-8');
+  return JSON.parse(raw);
+}
+
+// -----------------------------------------------------------------------------
+// Load metadata
+// -----------------------------------------------------------------------------
+
+const metadata = loadMetadataStructure();
+
+// -----------------------------------------------------------------------------
+// Sequelize connection registry
+// -----------------------------------------------------------------------------
+
+const sequelizeInstances = {};
+
+// -----------------------------------------------------------------------------
+// SQLite storage resolver (project-root or backend cwd safe)
+// -----------------------------------------------------------------------------
+
+function resolveSqliteStoragePath(storageRelOrAbs) {
+  const storage = String(storageRelOrAbs || '').trim();
+  if (!storage) return null;
+
+  // If already absolute, keep it
+  if (path.isAbsolute(storage)) return storage;
+
+  // Try resolving from cwd (project root OR backend/)
+  const candidates = [
+    path.resolve(process.cwd(), storage),          // running from project root
+    path.resolve(process.cwd(), '..', storage),    // running from backend/
+  ];
+
+  // Prefer an existing file if possible, otherwise fall back to first candidate
+  return candidates.find((p) => fs.existsSync(p)) || candidates[0];
+}
+
+// -----------------------------------------------------------------------------
+// Initialize Sequelize connections per SQL source
+// -----------------------------------------------------------------------------
+
+for (const source of metadata.sources || []) {
+  if (source.type !== 'sql') continue;
+
+  const dialect = source?.dialect ? String(source.dialect).trim() : '';
+  const databaseName = source?.databaseName ? String(source.databaseName).trim() : '';
+
+  if (!dialect || !databaseName) continue;
+
+  const sourceKey = `${dialect}.${databaseName}`;
+  if (sequelizeInstances[sourceKey]) continue;
+
+  let sequelize;
+
+  if (dialect === 'sqlite') {
+    // IMPORTANT:
+    // Use the sqlite file path from metadata (source.storage.file).
+    // Do NOT use databaseName as a file path.
+    const storageRel =
+      source?.storage?.file ||
+      `./backend/data/sql/databases/${databaseName}.db`;
+
+    const storagePath = resolveSqliteStoragePath(storageRel);
+
+    sequelize = new Sequelize({
+      dialect: 'sqlite',
+      storage: storagePath,
+      logging: false,
+    });
+  } else {
+    // Postgres (and future SQL dialects) from env
+    // Convention: DB_<DIALECT>_*
+    // Example: DB_POSTGRES_HOST, DB_POSTGRES_PORT, DB_POSTGRES_DATABASE, DB_POSTGRES_USER, DB_POSTGRES_PASSWORD
+    const prefix = `DB_${dialect.toUpperCase()}_`;
+
+    const dbName = process.env[`${prefix}DATABASE`];
+    const dbUser = process.env[`${prefix}USER`];
+    const dbPass = process.env[`${prefix}PASSWORD`];
+
+    sequelize = new Sequelize(dbName, dbUser, dbPass, {
+      host: process.env[`${prefix}HOST`],
+      port: process.env[`${prefix}PORT`],
+      dialect,
+      logging: false,
+    });
+  }
+
+  sequelizeInstances[sourceKey] = sequelize;
+}
+
+// -----------------------------------------------------------------------------
+// Public SQL driver API
+// -----------------------------------------------------------------------------
+
+const sqlDriver = {
+  type: 'sql',
+
+  /**
+   * Get Sequelize instance for a given source key (dialect.database)
+   */
+  getConnection(sourceKey) {
+    const sequelize = sequelizeInstances[sourceKey];
+    if (!sequelize) {
+      throw new Error(`No SQL connection found for source "${sourceKey}"`);
+    }
+    return sequelize;
+  },
+
+  /**
+   * Execute a raw SQL query
+   */
+  async query(sourceKey, sql, options = {}) {
+    const sequelize = this.getConnection(sourceKey);
+    return sequelize.query(sql, options);
+  },
+
+  /**
+   * Close all SQL connections
+   */
+  async closeAll() {
+    for (const sequelize of Object.values(sequelizeInstances)) {
+      await sequelize.close();
+    }
+  },
+};
+
+export default sqlDriver;
+
+// -----------------------------------------------------------------------------
+// End of auto-generated SQL driver
+// -----------------------------------------------------------------------------

@@ -1,0 +1,95 @@
+{
+  "@jupyterlab/mainmenu-extension:plugin": {
+    "menus": [
+      { "id": "jp-mainmenu-file", "disabled": true },
+      { "id": "jp-mainmenu-edit", "disabled": true },
+      { "id": "jp-mainmenu-view", "disabled": true },
+      { "id": "jp-mainmenu-run", "disabled": true },
+      { "id": "jp-mainmenu-kernel", "disabled": true },
+      { "id": "jp-mainmenu-tabs", "disabled": true },
+      { "id": "jp-mainmenu-settings", "disabled": true },
+      { "id": "jp-mainmenu-help", "disabled": true }
+    ]
+  },
+
+  "@jupyterlab/notebook-extension:panel": {
+    "toolbar": [
+      { "name": "insert", "disabled": true },
+      { "name": "cut", "disabled": true },
+      { "name": "copy", "disabled": true },
+      { "name": "paste", "disabled": true },
+      { "name": "save", "disabled": true },
+
+      { "name": "undo", "disabled": true },
+      { "name": "redo", "disabled": true },
+
+      { "name": "move-up", "disabled": true },
+      { "name": "move-down", "disabled": true },
+
+      { "name": "cell-type", "disabled": true },
+      { "name": "cellType", "disabled": true },
+      { "name": "celltype", "disabled": true },
+      { "name": "change-cell-type", "disabled": true },
+
+      { "name": "run", "disabled": true },
+      { "name": "run-cell", "disabled": true },
+
+      { "name": "stop", "disabled": true },
+      { "name": "interrupt", "disabled": true },
+      { "name": "interrupt-kernel", "disabled": true },
+
+      { "name": "restart", "disabled": true },
+      { "name": "restart-kernel", "disabled": true },
+
+      { "name": "restart-and-run-all", "disabled": true },
+      { "name": "restart-and-run-all-cells", "disabled": true },
+      { "name": "restart-kernel-and-run-all-cells", "disabled": true },
+
+
+      { "name": "run-all", "disabled": true },
+
+      {
+        "name": "custom-run",
+        "label": "Run",
+        "command": "notebook:run-cell-and-select-next",
+        "icon": "ui-components:run",
+        "rank": 10
+      },
+      {
+        "name": "custom-stop",
+        "label": "Stop",
+        "command": "kernelmenu:interrupt",
+        "icon": "ui-components:stop",
+        "rank": 20
+      },
+      {
+        "name": "custom-restart-kernel",
+        "label": "Kernel herstarten",
+        "command": "kernelmenu:restart",
+        "icon": "ui-components:refresh",
+        "rank": 30
+      },
+      {
+        "name": "custom-restart-run-all-cells",
+        "label": "Herstart + uitvoeren",
+        "command": "notebook:restart-kernel-and-run-all-cells",
+        "icon": "ui-components:refresh",
+        "rank": 40
+      },
+      {
+        "name": "custom-save",
+        "label": "Opslaan",
+        "command": "docmanager:save-as",
+        "icon": "ui-components:save",
+        "rank": 45
+      },
+      {
+        "name": "custom-download",
+        "label": "Downloaden (inleveren)",
+        "command": "docmanager:download",
+        "icon": "ui-components:download",
+        "rank": 50
+      }
+    ]
+  }
+}

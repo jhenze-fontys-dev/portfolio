@@ -1,0 +1,44 @@
+// -----------------------------------------------------------------------------
+// AUTO-GENERATED FILE — DO NOT EDIT
+//
+// File       : backend/data/factory/dataSourceRegistry.js
+// Generator  : dev/generators/generate.dataSourceRegistry.js
+// Template   : dev/templates/codeTemplates/template.dataSourceRegistry.hbs
+// Notes      : Registers available data source drivers. Used by runtime factory to resolve drivers by source type.
+//
+// This file is auto-generated. Any manual changes will be overwritten.
+// -----------------------------------------------------------------------------
+
+{{#if hasSql}}
+import sqlDriver from '../sql/sql.driver.js';
+{{/if}}
+{{#if hasJson}}
+import jsonDriver from '../json/json.driver.js';
+{{/if}}
+{{#if hasApi}}
+import apiDriver from '../api/api.driver.js';
+{{/if}}
+{{#if hasMqtt}}
+import mqttDriver from '../mqtt/mqtt.driver.js';
+{{/if}}
+
+const registry = {
+{{#if hasSql}}
+  sql: sqlDriver,
+{{/if}}
+{{#if hasJson}}
+  json: jsonDriver,
+{{/if}}
+{{#if hasApi}}
+  api: apiDriver,
+{{/if}}
+{{#if hasMqtt}}
+  mqtt: mqttDriver,
+{{/if}}
+};
+
+export default registry;
+
+// -----------------------------------------------------------------------------
+// End of auto-generated data source registry
+// -----------------------------------------------------------------------------

@@ -1,0 +1,81 @@
+# ------------------------------------------------------------------------------
+# AUTO-GENERATED APPLICATION SCHEMA
+#
+# Generator  : dev/generators/generate.schema.js
+# Template   : dev/templates/schemaTemplates/template.schema.yaml
+#
+# This file defines the top-level validation schema for the application.
+# It is auto-generated. Any manual changes will be overwritten.
+# ------------------------------------------------------------------------------
+
+type: object
+required:
+  - metadataVersion
+  - dataSources
+  - database
+
+properties:
+  metadataVersion:
+    type: number
+    description: Active metadata structure version
+
+  dataSources:
+    type: array
+    items:
+      type: string
+    description: Active backend data sources
+
+  database:
+    type: object
+    required:
+      - dialect
+      - entities
+    properties:
+      dialect:
+        type: string
+        description: Active SQL dialect
+
+      storage:
+        type: string
+        description: Database storage location (for sqlite)
+
+      entities:
+        type: array
+        items:
+          type: object
+          required:
+            - name
+            - tableName
+            - fields
+          properties:
+            name:
+              type: string
+
+            tableName:
+              type: string
+
+            fields:
+              type: array
+              items:
+                type: object
+                required:
+                  - name
+                  - typeNeutral
+                  - primaryKey
+                  - allowNull
+                properties:
+                  name:
+                    type: string
+
+                  typeNeutral:
+                    type: string
+
+                  primaryKey:
+                    type: boolean
+
+                  allowNull:
+                    type: boolean
+
+# ------------------------------------------------------------------------------
+# End of auto-generated application schema
+# ------------------------------------------------------------------------------
